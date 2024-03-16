@@ -24,15 +24,15 @@ export default function LoginScreen({ route, navigation }: Props) {
                 <Card.Title title="Login" titleVariant="labelLarge"></Card.Title>
 
                 <Card.Content>
-                    <TextInput mode="outlined" label="Username" onChangeText={(newUsername) => setUsername(newUsername)}></TextInput>
-                    <TextInput mode="outlined" label="Password" secureTextEntry={true} onChangeText={(newPassword) => setPassword(newPassword)}></TextInput>
-                    <Button style={loginStyle.cardButton}>Forgot email/password</Button>
+                    <TextInput mode="outlined" style={loginStyle.fieldInput} placeholder="Username" placeholderTextColor="white" outlineColor="white" activeOutlineColor="white" textColor="white" onChangeText={(newUsername) => setUsername(newUsername)} />
+                    <TextInput mode="outlined" placeholder="Password" placeholderTextColor="white" outlineColor="white" activeOutlineColor="white" textColor="white" secureTextEntry={true} onChangeText={(newPassword) => setPassword(newPassword)} />
+                    <Button style={loginStyle.cardButton} textColor="white">Forgot email/password?</Button>
                     {isSubmitting ? (
                         <ActivityIndicator size={40} style={loginStyle.cardButton} />
                     ): (
                         <Button style={loginStyle.cardButton} mode="contained">Login</Button>
                     )}
-                    <Button style={loginStyle.cardButton}>Register</Button>
+                    <Button style={loginStyle.cardButton} mode="outlined" textColor="white" onPress={() => navigation.navigate("Register")}>Register</Button>
 
                     <SuccessSnackbar visible={visible} closeSnackbar={() => setVisible(false)} snackbarContent={snackbarContent} />
                 </Card.Content>
