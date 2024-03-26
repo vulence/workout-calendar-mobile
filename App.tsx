@@ -1,11 +1,12 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider } from "react-native-paper";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as SecureStore from 'expo-secure-store';
 
 import HomeScreen from "./src/Home/HomeScreen";
-import AuthProvider, { AuthContext } from "./AuthContext";
+import { AuthContext } from "./AuthContext";
 import { AuthContextType } from "./types";
 import AccountStackScreen from "./src/AccountStackScreen/AccountStackScreen";
 import { theme } from "./AppStyle";
@@ -13,11 +14,26 @@ import { theme } from "./AppStyle";
 const Tab = createMaterialBottomTabNavigator();
 
 export default function App() {
-  const { authenticated } = useContext<AuthContextType>(AuthContext);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
+
+  const checkAuthentication = async () => {
+    SecureStore.deleteItemAsync('accessToken');
+    try {
+      const token = await SecureStore.getItemAsync('accessToken');
+      setAccessToken(token);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <AuthProvider>
-      <PaperProvider theme={theme}>
+    <PaperProvider theme={theme}>
+      <AuthContext.Provider value={{ user: user, accessToken: accessToken, setAccessToken: setAccessToken }}>
         <NavigationContainer>
           <Tab.Navigator
             initialRouteName="Home"
@@ -30,11 +46,10 @@ export default function App() {
               tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons name="account" color={color} size={26} />
               ),
-              
             }}
             />
 
-            {authenticated ? (
+            {accessToken ? (
               <Tab.Screen name="Home" component={HomeScreen} options={{
                 tabBarIcon: ({ color }) => (
                   <MaterialCommunityIcons name="home" color={color} size={26} />
@@ -44,7 +59,7 @@ export default function App() {
             ) : null}
           </Tab.Navigator>
         </NavigationContainer>
-      </PaperProvider>
-    </AuthProvider>
+      </AuthContext.Provider>
+    </PaperProvider>
   );
 }

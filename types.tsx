@@ -20,7 +20,8 @@ export type User = {
 
 export type AuthContextType = {
     user: User | null;
-    authenticated: boolean;
+    accessToken: string | null;
+    setAccessToken: (accessToken: string | null) => void;
 };
 
 export type AuthProviderProps = {

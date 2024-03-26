@@ -1,23 +1,58 @@
 import { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
-import { useState } from "react";
-import { ScrollView } from "react-native";
+import { useContext, useState } from "react";
+import { Keyboard, ScrollView } from "react-native";
 import { ActivityIndicator, Button, Card, TextInput } from "react-native-paper";
+import * as SecureStore from 'expo-secure-store';
 
 import { loginStyle } from "./LoginStyle";
-import { AccountStackParamsList } from "../../types";
+import { AccountStackParamsList, AuthContextType } from "../../types";
 import SuccessSnackbar from "./LoginSuccessSnackbar";
+import { AuthContext } from "../../AuthContext";
 
 type Props = MaterialBottomTabScreenProps<AccountStackParamsList, "Login">;
 
 export default function LoginScreen({ route, navigation }: Props) {
-
-    const [username, setUsername] = useState<string>();
-    const [password, setPassword] = useState<string>();
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const context = useContext<AuthContextType>(AuthContext);
 
     const [visible, setVisible] = useState<boolean>(false);
     const [snackbarContent, setSnackbarContent] = useState<string>('');
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    
+
+    const handleSubmit = async () => {
+        setIsSubmitting(true);
+        Keyboard.dismiss();
+
+        const payload = {
+            password: password,
+            emailOrUsername: username,
+            options: {}
+        };
+
+        const response = await fetch("https://api.userfront.com/v0/tenants/7n84856n/auth/password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        
+        if (data.tokens?.access?.value) {
+            await SecureStore.setItemAsync('accessToken', data.tokens.access.value);
+            context.setAccessToken(data.tokens.access.value);
+            setSnackbarContent("Login successful!");
+            navigation.jumpTo("Home");
+        } else {
+            setSnackbarContent(data.message);
+        }
+
+        setIsSubmitting(false);
+        setVisible(true);
+    };
+
     return (
         <ScrollView contentContainerStyle={loginStyle.content} keyboardShouldPersistTaps="handled">
             <Card style={loginStyle.card}>
@@ -29,8 +64,8 @@ export default function LoginScreen({ route, navigation }: Props) {
                     <Button style={loginStyle.cardButton} textColor="white">Forgot email/password?</Button>
                     {isSubmitting ? (
                         <ActivityIndicator size={40} style={loginStyle.cardButton} />
-                    ): (
-                        <Button style={loginStyle.cardButton} mode="contained">Login</Button>
+                    ) : (
+                        <Button style={loginStyle.cardButton} mode="contained" onPress={() => handleSubmit()}>Login</Button>
                     )}
                     <Button style={loginStyle.cardButton} mode="outlined" textColor="white" onPress={() => navigation.navigate("Register")}>Register</Button>
 
