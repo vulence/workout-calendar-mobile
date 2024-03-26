@@ -9,6 +9,7 @@ import HomeScreen from "./src/Home/HomeScreen";
 import { AuthContext } from "./AuthContext";
 import { AuthContextType } from "./types";
 import AccountStackScreen from "./src/AccountStackScreen/AccountStackScreen";
+import UserStackScreen from "./src/UserStackScreen/UserStackScreen";
 import { theme } from "./AppStyle";
 
 const Tab = createMaterialBottomTabNavigator();
@@ -42,7 +43,7 @@ export default function App() {
               backgroundColor: "rgb(30, 30, 30)",
             }}
           >
-            <Tab.Screen name="Account" component={AccountStackScreen} options={{
+            <Tab.Screen name="Account" component={accessToken ? UserStackScreen : AccountStackScreen} options={{
               tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons name="account" color={color} size={26} />
               ),
