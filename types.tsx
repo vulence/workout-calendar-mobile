@@ -46,3 +46,18 @@ export type SupportDialogProps = {
 export type LoadingProps = {
     isLoading: boolean;
 };
+
+export type DriveData = {
+    date: string;
+    homeAddress: string;
+    destinationAddress: string;
+    distance: number;
+    duration: string;
+    price: number;
+}
+
+export type HistoryDetailsProps = {
+    visible: boolean;
+    handleClose: () => void;
+    driveData: DriveData;
+};

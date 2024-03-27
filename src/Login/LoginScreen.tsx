@@ -1,12 +1,13 @@
 import { MaterialBottomTabScreenProps } from "@react-navigation/material-bottom-tabs";
 import { useContext, useState } from "react";
 import { Keyboard, ScrollView } from "react-native";
-import { ActivityIndicator, Button, Card, TextInput } from "react-native-paper";
+import { ActivityIndicator, Button, Card } from "react-native-paper";
 import * as SecureStore from 'expo-secure-store';
 
 import { loginStyle } from "./LoginStyle";
 import { AccountStackParamsList, AuthContextType } from "../../types";
 import SuccessSnackbar from "./LoginSuccessSnackbar";
+import StyledTextInput from "../components/StyledTextInput";
 import { AuthContext } from "../../AuthContext";
 
 type Props = MaterialBottomTabScreenProps<AccountStackParamsList, "Login">;
@@ -59,8 +60,8 @@ export default function LoginScreen({ route, navigation }: Props) {
                 <Card.Title title="Login" titleVariant="labelLarge"></Card.Title>
 
                 <Card.Content>
-                    <TextInput mode="outlined" style={loginStyle.fieldInput} placeholder="Username" placeholderTextColor="white" outlineColor="white" activeOutlineColor="white" textColor="white" onChangeText={(newUsername) => setUsername(newUsername)} />
-                    <TextInput mode="outlined" placeholder="Password" placeholderTextColor="white" outlineColor="white" activeOutlineColor="white" textColor="white" secureTextEntry={true} onChangeText={(newPassword) => setPassword(newPassword)} />
+                    <StyledTextInput mode="outlined" style={loginStyle.fieldInput} placeholder="Username" onChangeText={(newUsername) => setUsername(newUsername)} />
+                    <StyledTextInput mode="outlined" placeholder="Password" secureTextEntry={true} onChangeText={(newPassword) => setPassword(newPassword)} />
                     <Button style={loginStyle.cardButton} textColor="white">Forgot email/password?</Button>
                     {isSubmitting ? (
                         <ActivityIndicator size={40} style={loginStyle.cardButton} />

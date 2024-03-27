@@ -1,16 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { PaperProvider } from "react-native-paper";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as SecureStore from 'expo-secure-store';
 
 import HomeScreen from "./src/Home/HomeScreen";
+import WorkoutsScreen from "./src/Workouts/WorkoutsScreen";
 import { AuthContext } from "./AuthContext";
-import { AuthContextType } from "./types";
 import AccountStackScreen from "./src/AccountStackScreen/AccountStackScreen";
 import UserStackScreen from "./src/UserStackScreen/UserStackScreen";
 import { theme } from "./AppStyle";
+import { StatusBar } from "expo-status-bar";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -24,6 +25,7 @@ export default function App() {
 
   const checkAuthentication = async () => {
     SecureStore.deleteItemAsync('accessToken');
+
     try {
       const token = await SecureStore.getItemAsync('accessToken');
       setAccessToken(token);
@@ -35,7 +37,9 @@ export default function App() {
   return (
     <PaperProvider theme={theme}>
       <AuthContext.Provider value={{ user: user, accessToken: accessToken, setAccessToken: setAccessToken }}>
-        <NavigationContainer>
+        <StatusBar />
+        
+        <NavigationContainer theme={DarkTheme}>
           <Tab.Navigator
             initialRouteName="Home"
             activeColor="white"
@@ -50,13 +54,21 @@ export default function App() {
             }}
             />
 
-            {accessToken ? (
-              <Tab.Screen name="Home" component={HomeScreen} options={{
-                tabBarIcon: ({ color }) => (
-                  <MaterialCommunityIcons name="home" color={color} size={26} />
-                ),
-              }}
-              />
+            {true ? (
+              <>
+                <Tab.Screen name="Home" component={HomeScreen} options={{
+                  tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name="home" color={color} size={26} />
+                  ),
+                }}
+                />
+                <Tab.Screen name="Workouts" component={WorkoutsScreen} options={{
+                  tabBarIcon: ({ color }) => (
+                    <MaterialCommunityIcons name="weight-lifter" color={color} size={26} />
+                  ),
+                }}
+                />
+              </>
             ) : null}
           </Tab.Navigator>
         </NavigationContainer>

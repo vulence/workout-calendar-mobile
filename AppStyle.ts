@@ -5,7 +5,7 @@ export const theme = {
     roundness: 10,
     colors: {
         ...MD3DarkTheme.colors,
-        primary: "rgb(0, 0, 0)",
+        primary: "black",
         onPrimary: "white",
         background: "transparent"
     },

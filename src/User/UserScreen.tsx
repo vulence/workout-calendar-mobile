@@ -79,15 +79,15 @@ export default function UserScreen({ route, navigation }: Props) {
                 <Card.Content>
                     <View style={userStyle.infoContent}>
                         <View style={userStyle.infoColumn}>
-                            <Title style={[userStyle.title, { fontFamily: "Inter-Medium" }]}>Član Od</Title>
+                            <Title style={[userStyle.title, { fontFamily: "Inter-Medium" }]}>Member Since</Title>
                             <Text style={[userStyle.text, { fontFamily: "Inter-Regular" }]}>{context?.user ? context.user.createdAt : "11/09/2023"}</Text>
                         </View>
                         <View style={userStyle.infoColumn}>
-                            <Title style={[userStyle.title, { fontFamily: "Inter-Medium" }]}>Broj Vožnji</Title>
+                            <Title style={[userStyle.title, { fontFamily: "Inter-Medium" }]}>Lorem</Title>
                             <Text style={[userStyle.text, { fontFamily: "Inter-Regular" }]}>12</Text>
                         </View>
                         <View style={userStyle.infoColumn}>
-                            <Title style={[userStyle.title, { fontFamily: "Inter-Medium" }]}>Članstvo</Title>
+                            <Title style={[userStyle.title, { fontFamily: "Inter-Medium" }]}>Level</Title>
                             <Text style={[userStyle.text, { fontFamily: "Inter-Regular" }]}>Basic</Text>
                         </View>
                     </View>
@@ -95,10 +95,10 @@ export default function UserScreen({ route, navigation }: Props) {
             </Card>
 
             <Divider />
-            <List.Accordion title="Kućna Lokacija" titleStyle={[userStyle.listAccordionTitle, { fontFamily: "Inter-Bold" }]} style={userStyle.listAccordion} left={props => <List.Icon {...props} color="rgb(147,27,27)" icon="pin" />}>
+            <List.Accordion title="Home Address" titleStyle={[userStyle.listAccordionTitle, { fontFamily: "Inter-Bold" }]} style={userStyle.listAccordion} left={props => <List.Icon {...props} color="rgb(207,27,27)" icon="pin" />}>
                 <View style={userStyle.listItemContainer}>
                     <Text variant="bodyLarge">{homeAddress}</Text>
-                    <Button mode="elevated" style={userStyle.editAddressButton} textColor="rgb(143,27,27)" buttonColor='rgb(242,242,242)' onPress={() => handleEditAddress()}>Promeni</Button>
+                    <Button mode="elevated" style={userStyle.editAddressButton} textColor="rgb(207,27,27)" buttonColor='rgb(242,242,242)' onPress={() => handleEditAddress()}>Promeni</Button>
                 </View>
             </List.Accordion>
 

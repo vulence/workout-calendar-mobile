@@ -25,9 +25,11 @@ export const userStyle = StyleSheet.create({
     title: {
         textAlign: 'center',
         fontSize: 18,
+        color: 'white'
     },
     text: {
         textAlign: 'center',
+        color: 'white'
     },
 
     // Styles for the three-column info below the avatar
@@ -48,7 +50,7 @@ export const userStyle = StyleSheet.create({
         backgroundColor: "rgb(50, 50, 50)"
     },
     listAccordionTitle: {
-        color: "rgb(147, 27, 27)",
+        color: "rgb(207, 27, 27)",
     },
     listItemContainer: {
         flexDirection: 'row',
