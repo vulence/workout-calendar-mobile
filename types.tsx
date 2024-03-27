@@ -61,3 +61,12 @@ export type HistoryDetailsProps = {
     handleClose: () => void;
     driveData: DriveData;
 };
+
+export type Workout = {
+    id: number;
+    title: string;
+    date: string;
+    notes: string;
+    duration: number;
+    rating: number;
+};

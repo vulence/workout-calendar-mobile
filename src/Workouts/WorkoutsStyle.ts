@@ -5,7 +5,6 @@ export const workoutsStyle = StyleSheet.create({
         height: "100%",
         backgroundColor: "rgb(66, 66, 66)",
         flex: 1,
-        paddingTop: 40,
     },
     contentContainer: {
         flexGrow: 1,

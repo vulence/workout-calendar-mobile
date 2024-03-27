@@ -24,7 +24,7 @@ export default function App() {
   }, []);
 
   const checkAuthentication = async () => {
-    SecureStore.deleteItemAsync('accessToken');
+    // SecureStore.deleteItemAsync('accessToken');
 
     try {
       const token = await SecureStore.getItemAsync('accessToken');
@@ -54,7 +54,7 @@ export default function App() {
             }}
             />
 
-            {true ? (
+            {accessToken ? (
               <>
                 <Tab.Screen name="Home" component={HomeScreen} options={{
                   tabBarIcon: ({ color }) => (
