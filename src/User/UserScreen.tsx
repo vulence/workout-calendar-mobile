@@ -98,29 +98,29 @@ export default function UserScreen({ route, navigation }: Props) {
             <List.Accordion title="Home Address" titleStyle={[userStyle.listAccordionTitle, { fontFamily: "Inter-Bold" }]} style={userStyle.listAccordion} left={props => <List.Icon {...props} color="rgb(207,27,27)" icon="pin" />}>
                 <View style={userStyle.listItemContainer}>
                     <Text variant="bodyLarge">{homeAddress}</Text>
-                    <Button mode="elevated" style={userStyle.editAddressButton} textColor="rgb(207,27,27)" buttonColor='rgb(242,242,242)' onPress={() => handleEditAddress()}>Promeni</Button>
+                    <Button mode="elevated" style={userStyle.editAddressButton} textColor="rgb(207,27,27)" buttonColor='rgb(242,242,242)' onPress={() => handleEditAddress()}>Change</Button>
                 </View>
             </List.Accordion>
 
             <View style={userStyle.buttonContainer}>
                 <Button mode="elevated" contentStyle={userStyle.buttonContent} style={userStyle.button} icon="history" onPress={() => navigation.navigate("History")}>
-                    Istorija
+                    History
                 </Button>
                 <Button mode="elevated" contentStyle={userStyle.buttonContent} style={userStyle.button} icon="sale" onPress={() => { }}>
-                    Promocije
+                    Promotions
                 </Button>
                 <Button mode="elevated" contentStyle={userStyle.buttonContent} style={userStyle.button} icon="wrench" onPress={() => navigation.navigate("Settings")}>
-                    Podešavanja
+                    Settings
                 </Button>
                 <Button mode="contained" contentStyle={userStyle.buttonContent} buttonColor='rgb(143,27,27)' icon="logout" onPress={() => handleLogout()}>
-                    Odjavi se
+                    Logout
                 </Button>
             </View>
 
             <FAB
                 icon={() => <MaterialIcon name="support-agent" size={24} color="white" />}
                 style={userStyle.fab}
-                label="Podrška"
+                label="Support"
                 color="white"
                 onPress={showDialog}
             />

@@ -66,5 +66,13 @@ export const workoutsStyle = StyleSheet.create({
         marginTop: 25,
         padding: 10,
         borderWidth: 2,
+    },
+    fab: {
+        position: 'absolute',
+        margin: 10,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "black",
+        borderRadius: 30
     }
 });

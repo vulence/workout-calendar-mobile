@@ -70,3 +70,8 @@ export type Workout = {
     duration: number;
     rating: number;
 };
+
+export type WorkoutDialogProps = {
+    visible: boolean;
+    hideDialog: () => void;
+};

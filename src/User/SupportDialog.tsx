@@ -82,7 +82,7 @@ export default function SupportDialog(props: SupportDialogProps) {
                     <Divider bold={true} />
 
                     <Card.Actions style={supportDialogStyle.sendEmailButton}>
-                        <Button onPress={sendEmail}>Pošalji mejl</Button>
+                        <Button textColor='white' onPress={sendEmail}>Send email</Button>
                     </Card.Actions>
 
                     <LoadingIndicator isLoading={isEmailSending} />
