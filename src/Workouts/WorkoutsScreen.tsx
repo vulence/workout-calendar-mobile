@@ -8,7 +8,7 @@ import { workoutsStyle } from './WorkoutsStyle';
 import HistoryDetailsScreen from './HistoryDetailsScreen';
 import { useFonts } from 'expo-font';
 import { Workout } from '../../types';
-import { fetchWorkouts } from '../api/api';
+import { fetchWorkouts, submitWorkout } from '../api/api';
 import { AuthContext } from '../../AuthContext';
 import WorkoutDialog from './WorkoutDialog';
 
@@ -56,9 +56,13 @@ export default function WorkoutsScreen() {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
+        getWorkouts();
+    }, []);
+
+    const getWorkouts = () => {
         setLoading(true);
         fetchWorkouts(context.accessToken!).then((data) => { setWorkouts(data); setLoading(false) }).catch((error) => console.error(error));
-    }, []);
+    };
 
     const [ratingColors, setRatingColors] = useState<{ [key: number]: string }>({});
 
@@ -96,39 +100,58 @@ export default function WorkoutsScreen() {
         setRatingColors(updatedColors);
     };
 
+    const [isSubmittingWorkout, setIsSubmittingWorkout] = useState<boolean>(false);
+
+    const handleWorkoutSubmit = (workout: any) => {
+        setIsSubmittingWorkout(true);
+
+        submitWorkout(context.accessToken!, workout).then((data) => {
+            setDialogVisible(false);
+            setIsSubmittingWorkout(false);
+            getWorkouts();
+        }).catch((error) => console.error(error));
+    };
+
     return (
-        <ScrollView style={workoutsStyle.content} contentContainerStyle={workoutsStyle.contentContainer}>
-            <View style={{ backgroundColor: "rgb(30, 30, 30)", paddingTop: 40 }}>
-                <Text style={{ marginLeft: 10, marginBottom: 10, fontFamily: "Inter-Bold", fontSize: 30 }}>Workouts</Text>
-            </View>
-            <Divider style={{ backgroundColor: "rgb(0, 0, 0)" }} />
+        <View style={workoutsStyle.container}>
+            <ScrollView style={workoutsStyle.content} contentContainerStyle={workoutsStyle.contentContainer}>
+                <View style={{ backgroundColor: "rgb(30, 30, 30)", paddingTop: 40 }}>
+                    <Text style={{ marginLeft: 10, marginBottom: 10, fontFamily: "Inter-Bold", fontSize: 30 }}>Workouts</Text>
+                </View>
+                <Divider style={{ backgroundColor: "rgb(0, 0, 0)" }} />
 
-            {loading ? (
-                <Modal visible={true} style={workoutsStyle.activityIndicatorOverlay} dismissable={false}>
-                    <ActivityIndicator animating={true} size='large' color='white' />
-                </Modal>
-            ) : (
-                workouts!.map((workout, index) => (
-                    <Card key={workout.id} style={workoutsStyle.card}>
-                        <Card.Title title={workout.title} subtitle={workout.duration + " min"} titleStyle={{ color: "white" }} subtitleStyle={{ color: "white" }} />
+                {loading ? (
+                    <Modal visible={true} style={workoutsStyle.activityIndicatorOverlay} dismissable={false}>
+                        <ActivityIndicator animating={true} size='large' color='white' />
+                    </Modal>
+                ) : (
+                    workouts!.map((workout, index) => (
+                        <Card key={workout.id} style={workoutsStyle.card}>
+                            <Card.Title title={workout.title} subtitle={workout.duration + " min"} titleStyle={{ color: "white" }} subtitleStyle={{ color: "white" }} />
 
-                        <Divider />
+                            <Divider />
 
-                        <Button style={workoutsStyle.cardButton} mode="text" textColor='white' onPress={() => { handleDetailsOpen("15/09/2023", "Ljube Tadica 32", 15, "Trg republike 1a", "0:45", 2500) }}>Details</Button>
+                            <Button style={workoutsStyle.cardButton} mode="text" textColor='white' onPress={() => { handleDetailsOpen("15/09/2023", "Ljube Tadica 32", 15, "Trg republike 1a", "0:45", 2500) }}>Details</Button>
 
-                        <View style={workoutsStyle.ratingContainer}>
-                            <AirbnbRating
-                                size={20}
-                                defaultRating={workout.rating ? workout.rating : 0}
-                                showRating={false}
-                                isDisabled={false}
-                                onFinishRating={(value) => handleRatingChange(workout.id, value)}
-                                selectedColor={ratingColors[workout.id]}
-                            />
-                        </View>
-                    </Card>
-                ))
-            )}
+                            <View style={workoutsStyle.ratingContainer}>
+                                <AirbnbRating
+                                    size={20}
+                                    defaultRating={workout.rating ? workout.rating : 0}
+                                    showRating={false}
+                                    isDisabled={false}
+                                    onFinishRating={(value) => handleRatingChange(workout.id, value)}
+                                    selectedColor={ratingColors[workout.id]}
+                                />
+                            </View>
+                        </Card>
+                    ))
+                )}
+
+
+                <HistoryDetailsScreen visible={visible} handleClose={handleDetailsClose} driveData={driveData} />
+            </ScrollView>
+
+            <WorkoutDialog visible={dialogVisible} hideDialog={() => setDialogVisible(false)} handleSubmit={handleWorkoutSubmit} isSubmitting={isSubmittingWorkout} />
 
             <FAB
                 icon={() => <MaterialIcon name="add" size={24} color="white" />}
@@ -138,10 +161,6 @@ export default function WorkoutsScreen() {
                 onPress={() => setDialogVisible(true)}
                 disabled={loading}
             />
-
-            <WorkoutDialog visible={dialogVisible} hideDialog={() => setDialogVisible(false)} token={context.accessToken!} />
-
-            <HistoryDetailsScreen visible={visible} handleClose={handleDetailsClose} driveData={driveData} />
-        </ScrollView>
+        </View>
     );
 }

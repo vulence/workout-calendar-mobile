@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native';
 
 export const workoutsStyle = StyleSheet.create({
+    container: {
+        flex: 1
+    },
     content: {
         height: "100%",
         backgroundColor: "rgb(66, 66, 66)",

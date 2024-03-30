@@ -74,5 +74,6 @@ export type Workout = {
 export type WorkoutDialogProps = {
     visible: boolean;
     hideDialog: () => void;
-    token: string;
+    handleSubmit: (workout: any) => void;
+    isSubmitting: boolean;
 };

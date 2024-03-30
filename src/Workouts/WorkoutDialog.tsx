@@ -1,12 +1,11 @@
-import { useState } from "react";
-import { Button, Card, Divider, IconButton, Modal, Text } from "react-native-paper";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Button, Card, Divider, IconButton, Modal, Text } from "react-native-paper";
 import { View } from "react-native";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 import { WorkoutDialogProps } from "../../types";
 import { workoutDialogStyle } from "./WorkoutDialogStyle";
 import StyledTextInput from "../components/StyledTextInput";
-import { submitWorkout } from "../api/api";
 
 export default function WorkoutDialog(props: WorkoutDialogProps) {
     const [title, setTitle] = useState<string>('');
@@ -19,6 +18,17 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
     });
     const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [showDurationPicker, setShowDurationPicker] = useState<boolean>(false);
+
+    useEffect(() => {
+        setTitle('');
+        setDate(new Date());
+        setDuration(() => {
+            const currentDate = new Date();
+            currentDate.setHours(0);
+            currentDate.setMinutes(0);
+            return currentDate;
+        });
+    }, [props.visible]);
 
     const handleDateChange = (e: DateTimePickerEvent, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
@@ -34,8 +44,7 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
 
     const handleSubmit = async () => {
         const workout: any = {title: title, date: date, notes: '', duration: (duration.getHours() * 60 + duration.getMinutes())};
-
-        submitWorkout(props.token, workout).then((data) => console.log(data)).catch((error) => console.error(error));
+        props.handleSubmit(workout);
     };
 
     return (
@@ -68,7 +77,7 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
 
                     <View style={workoutDialogStyle.inputContainer}>
                         <Text>Duration</Text>
-                        <Button mode="outlined" style={workoutDialogStyle.inputButton} labelStyle={workoutDialogStyle.inputButtonText} onPress={() => setShowDurationPicker(true)}>{duration.getHours() + ":" + duration.getMinutes()}</Button>
+                        <Button mode="outlined" style={workoutDialogStyle.inputButton} labelStyle={workoutDialogStyle.inputButtonText} onPress={() => setShowDurationPicker(true)}>{duration.getHours() + ":0" + duration.getMinutes()}</Button>
                         {showDurationPicker && (
                             <DateTimePicker
                                 value={duration}
@@ -80,7 +89,11 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
                         )}
                     </View>
 
-                    <Button mode="contained" textColor="white" style={workoutDialogStyle.submitButton} onPress={() => handleSubmit()}>Submit</Button>
+                    {props.isSubmitting ? (
+                        <ActivityIndicator size={40} style={workoutDialogStyle.submitButton} />
+                    ) : (
+                        <Button mode="contained" textColor="white" style={workoutDialogStyle.submitButton} onPress={() => handleSubmit()}>Submit</Button>
+                    )}
                 </Card.Content>
 
                 <Divider bold={true} />
