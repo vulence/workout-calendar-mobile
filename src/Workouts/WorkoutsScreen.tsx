@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, ScrollView } from 'react-native';
-import { Card, Text, Button, Divider, FAB } from 'react-native-paper';
+import { Card, Text, Button, Divider, FAB, ActivityIndicator, Modal } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-ratings';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -53,9 +53,48 @@ export default function WorkoutsScreen() {
     const [workouts, setWorkouts] = useState<Workout[]>();
     const [dialogVisible, setDialogVisible] = useState<boolean>(false);
 
+    const [loading, setLoading] = useState<boolean>(true);
+
     useEffect(() => {
-        fetchWorkouts(context.accessToken!).then((data) => setWorkouts(data)).catch((error) => console.error(error));
+        setLoading(true);
+        fetchWorkouts(context.accessToken!).then((data) => { setWorkouts(data); setLoading(false) }).catch((error) => console.error(error));
     }, []);
+
+    const [ratingColors, setRatingColors] = useState<{ [key: number]: string }>({});
+
+    // Set AirbnbRatings component color for each workout
+    useEffect(() => {
+        const initialColors: { [key: number]: string } = {};
+
+        workouts?.forEach((workout) => {
+            initialColors[workout.id] = getRatingColor(workout.rating);
+        });
+
+        setRatingColors(initialColors);
+    }, [workouts]);
+
+    const getRatingColor = (rating: number) => {
+        switch (rating) {
+            case 1:
+                return 'rgb(204,0,0)';
+            case 2:
+                return 'rgb(255,128,0)';
+            case 3:
+                return 'rgb(255,255,102)';
+            case 4:
+                return 'rgb(153,255,153)'
+            case 5:
+                return 'rgb(0,204,0)';
+            default:
+                return 'grey';
+        }
+    };
+
+    const handleRatingChange = (workoutId: number, value: number) => {
+        const updatedColors = { ...ratingColors };
+        updatedColors[workoutId] = getRatingColor(value);
+        setRatingColors(updatedColors);
+    };
 
     return (
         <ScrollView style={workoutsStyle.content} contentContainerStyle={workoutsStyle.contentContainer}>
@@ -64,25 +103,32 @@ export default function WorkoutsScreen() {
             </View>
             <Divider style={{ backgroundColor: "rgb(0, 0, 0)" }} />
 
-            {workouts?.map((workout, index) => (
-                <Card key={workout.id} style={workoutsStyle.card}>
-                    <Card.Title title={workout.title} subtitle={workout.duration + " min"} titleStyle={{ color: "white" }} subtitleStyle={{ color: "white" }} />
+            {loading ? (
+                <Modal visible={true} style={workoutsStyle.activityIndicatorOverlay} dismissable={false}>
+                    <ActivityIndicator animating={true} size='large' color='white' />
+                </Modal>
+            ) : (
+                workouts!.map((workout, index) => (
+                    <Card key={workout.id} style={workoutsStyle.card}>
+                        <Card.Title title={workout.title} subtitle={workout.duration + " min"} titleStyle={{ color: "white" }} subtitleStyle={{ color: "white" }} />
 
-                    <Divider />
+                        <Divider />
 
-                    <Button style={workoutsStyle.cardButton} mode="text" textColor='white' onPress={() => { handleDetailsOpen("15/09/2023", "Ljube Tadica 32", 15, "Trg republike 1a", "0:45", 2500) }}>Details</Button>
+                        <Button style={workoutsStyle.cardButton} mode="text" textColor='white' onPress={() => { handleDetailsOpen("15/09/2023", "Ljube Tadica 32", 15, "Trg republike 1a", "0:45", 2500) }}>Details</Button>
 
-                    <View style={workoutsStyle.ratingContainer}>
-                        <AirbnbRating
-                            size={20}
-                            defaultRating={workout.rating}
-                            showRating={false}
-                            isDisabled={false}
-                            selectedColor="rgb(143, 27, 27)"
-                        />
-                    </View>
-                </Card>
-            ))}
+                        <View style={workoutsStyle.ratingContainer}>
+                            <AirbnbRating
+                                size={20}
+                                defaultRating={workout.rating ? workout.rating : 0}
+                                showRating={false}
+                                isDisabled={false}
+                                onFinishRating={(value) => handleRatingChange(workout.id, value)}
+                                selectedColor={ratingColors[workout.id]}
+                            />
+                        </View>
+                    </Card>
+                ))
+            )}
 
             <FAB
                 icon={() => <MaterialIcon name="add" size={24} color="white" />}
@@ -90,9 +136,10 @@ export default function WorkoutsScreen() {
                 color="white"
                 style={workoutsStyle.fab}
                 onPress={() => setDialogVisible(true)}
+                disabled={loading}
             />
 
-            <WorkoutDialog visible={dialogVisible} hideDialog={() => setDialogVisible(false)} />
+            <WorkoutDialog visible={dialogVisible} hideDialog={() => setDialogVisible(false)} token={context.accessToken!} />
 
             <HistoryDetailsScreen visible={visible} handleClose={handleDetailsClose} driveData={driveData} />
         </ScrollView>

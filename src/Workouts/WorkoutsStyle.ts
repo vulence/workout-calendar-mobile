@@ -74,5 +74,11 @@ export const workoutsStyle = StyleSheet.create({
         bottom: 0,
         backgroundColor: "black",
         borderRadius: 30
+    },
+    activityIndicatorOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "rgba(0, 0, 0, 0.5)"
     }
 });

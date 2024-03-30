@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const workoutDialogStyle = StyleSheet.create({
     modal: {
-        backgroundColor: "rgb(40, 40, 40)",
+        backgroundColor: "rgb(30, 30, 30)",
         margin: 16,
         borderRadius: 20,
     },
@@ -26,5 +26,19 @@ export const workoutDialogStyle = StyleSheet.create({
         height: 40,
         width: 250,
         marginLeft: 20
-    },    
+    },
+    inputButton: {
+        marginLeft: 30,
+        backgroundColor: "rgb(20, 20, 20)",
+        borderRadius: 10
+    },
+    inputButtonText: {
+        fontSize: 18,
+        color: "white"
+    },
+    submitButton: {
+        marginTop: 10,
+        marginBottom: 10,
+        borderRadius: 5
+    }
 });
