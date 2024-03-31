@@ -56,10 +56,11 @@ export type DriveData = {
     price: number;
 }
 
-export type HistoryDetailsProps = {
+export type WorkoutDetailsProps = {
     visible: boolean;
     handleClose: () => void;
-    driveData: DriveData;
+    workout: Workout | null;
+    workoutExercises: WorkoutExercise[] | null;
 };
 
 export type Workout = {
@@ -69,6 +70,17 @@ export type Workout = {
     notes: string;
     duration: number;
     rating: number;
+};
+
+export type WorkoutExercise = {
+    id: number;
+    exerciseName: string;
+    weight: number;
+    sets: number;
+    reps: number;
+    completed: boolean;
+    workoutId: number;
+    exerciseId: number;
 };
 
 export type WorkoutDialogProps = {

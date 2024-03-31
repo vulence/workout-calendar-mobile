@@ -5,10 +5,10 @@ import { AirbnbRating } from 'react-native-ratings';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { workoutsStyle } from './WorkoutsStyle';
-import HistoryDetailsScreen from './HistoryDetailsScreen';
+import WorkoutDetailsScreen from './WorkoutDetails/WorkoutDetailsScreen';
 import { useFonts } from 'expo-font';
-import { Workout } from '../../types';
-import { fetchWorkouts, submitWorkout } from '../api/api';
+import { Workout, WorkoutExercise } from '../../types';
+import { fetchWorkoutExercises, fetchWorkouts, submitWorkout } from '../api/api';
 import { AuthContext } from '../../AuthContext';
 import WorkoutDialog from './WorkoutDialog';
 
@@ -20,38 +20,24 @@ export default function WorkoutsScreen() {
     });
 
     // Details modal states
-    const [visible, setVisible] = useState<boolean>(false);
-    const [driveData, setDriveData] = useState<any>({
-        date: '',
-        homeAddress: '',
-        destinationAddress: '',
-        distance: 0,
-        duration: '',
-        price: 0,
-    });
+    const [detailsDialogVisible, setDetailsDialogVisible] = useState<boolean>(false);
+    const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
+    const [selectedWorkoutExercises, setSelectedWorkoutExercises] = useState<WorkoutExercise[] | null>(null);
 
     // Sets the details props to corresponding cards and displays it
-    const handleDetailsOpen = (newDate: string, newHomeAddress: string, newDistance: number, newDestinationAddress: string, newDuration: string, newPrice: number) => {
-        setDriveData({
-            date: newDate,
-            homeAddress: newHomeAddress,
-            distance: newDistance,
-            destinationAddress: newDestinationAddress,
-            duration: newDuration,
-            price: newPrice
-        });
-
-        setVisible(true);
+    const handleDetailsOpen = (workout: Workout) => {
+        setSelectedWorkout(workout);
+        getWorkoutExercises(workout.id).then(() => setDetailsDialogVisible(true));
     };
 
     // Hides the details modal
     const handleDetailsClose = () => {
-        setVisible(false);
+        setDetailsDialogVisible(false);
     };
 
     const context = useContext(AuthContext);
     const [workouts, setWorkouts] = useState<Workout[]>();
-    const [dialogVisible, setDialogVisible] = useState<boolean>(false);
+    const [newWorkoutDialogVisible, setNewWorkoutDialogVisible] = useState<boolean>(false);
 
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -62,6 +48,10 @@ export default function WorkoutsScreen() {
     const getWorkouts = () => {
         setLoading(true);
         fetchWorkouts(context.accessToken!).then((data) => { setWorkouts(data); setLoading(false) }).catch((error) => console.error(error));
+    };
+
+    const getWorkoutExercises = (workoutId: number) => {
+        return fetchWorkoutExercises(context.accessToken!, workoutId.toString()).then((data) => setSelectedWorkoutExercises(data)).catch((error) => console.error(error));
     };
 
     const [ratingColors, setRatingColors] = useState<{ [key: number]: string }>({});
@@ -106,7 +96,7 @@ export default function WorkoutsScreen() {
         setIsSubmittingWorkout(true);
 
         submitWorkout(context.accessToken!, workout).then((data) => {
-            setDialogVisible(false);
+            setNewWorkoutDialogVisible(false);
             setIsSubmittingWorkout(false);
             getWorkouts();
         }).catch((error) => console.error(error));
@@ -131,7 +121,7 @@ export default function WorkoutsScreen() {
 
                             <Divider />
 
-                            <Button style={workoutsStyle.cardButton} mode="text" textColor='white' onPress={() => { handleDetailsOpen("15/09/2023", "Ljube Tadica 32", 15, "Trg republike 1a", "0:45", 2500) }}>Details</Button>
+                            <Button style={workoutsStyle.cardButton} mode="text" textColor='white' onPress={() => { handleDetailsOpen(workout) }}>Details</Button>
 
                             <View style={workoutsStyle.ratingContainer}>
                                 <AirbnbRating
@@ -146,21 +136,19 @@ export default function WorkoutsScreen() {
                         </Card>
                     ))
                 )}
-
-
-                <HistoryDetailsScreen visible={visible} handleClose={handleDetailsClose} driveData={driveData} />
             </ScrollView>
-
-            <WorkoutDialog visible={dialogVisible} hideDialog={() => setDialogVisible(false)} handleSubmit={handleWorkoutSubmit} isSubmitting={isSubmittingWorkout} />
 
             <FAB
                 icon={() => <MaterialIcon name="add" size={24} color="white" />}
                 label="Add"
                 color="white"
                 style={workoutsStyle.fab}
-                onPress={() => setDialogVisible(true)}
+                onPress={() => setNewWorkoutDialogVisible(true)}
                 disabled={loading}
             />
+
+            <WorkoutDialog visible={newWorkoutDialogVisible} hideDialog={() => setNewWorkoutDialogVisible(false)} handleSubmit={handleWorkoutSubmit} isSubmitting={isSubmittingWorkout} />
+            <WorkoutDetailsScreen visible={detailsDialogVisible} handleClose={handleDetailsClose} workout={selectedWorkout} workoutExercises={selectedWorkoutExercises} />
         </View>
     );
 }

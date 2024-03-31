@@ -29,47 +29,6 @@ export const workoutsStyle = StyleSheet.create({
         right: 8,
         backgroundColor: 'transparent',
     },
-    detailsTitleContainer: {
-        marginLeft: 50
-    },
-    detailsTitleText: {
-        alignSelf: "center",
-        fontWeight: "bold",
-        fontSize: 25
-    },
-    detailsModal: {
-        backgroundColor: "transparent",
-        margin: 16,
-    },
-    detailsClockContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 5
-    },
-    detailsRouteContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center"
-    },
-    detailsRouteAddresses: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginBottom: 5,
-    },
-    detailsPriceContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    detailsDriverContainer: {
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 16,
-        marginTop: 25,
-        padding: 10,
-        borderWidth: 2,
-    },
     fab: {
         position: 'absolute',
         margin: 10,

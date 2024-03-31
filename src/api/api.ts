@@ -14,6 +14,18 @@ export async function fetchWorkouts(token : string, page = "0", direction = "des
     return result;
 };
 
+export async function fetchWorkoutExercises(token: string, workoutId: string) {
+    const response = await fetch(`${API_URL}/workouts/${workoutId}/exercises`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+    });
+
+    const result = await response.json();
+    return result;
+};
+
 export async function submitWorkout(token: string, workout: any) {
     const response = await fetch(`${API_URL}/workouts`, {
         method: "POST",
@@ -26,4 +38,4 @@ export async function submitWorkout(token: string, workout: any) {
 
     const result = await response.json();
     return result.message;
-}
+};
