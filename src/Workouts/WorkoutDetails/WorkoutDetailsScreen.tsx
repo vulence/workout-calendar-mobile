@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView } from 'react-native';
-import { Card, Text, Button, Divider, Portal, Modal, IconButton } from 'react-native-paper';
+import { Card, Text, Button, Divider, Portal, Modal, IconButton, List } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { workoutDetailsStyle } from './WorkoutDetailsStyle';
@@ -22,12 +22,20 @@ export default function WorkoutDetailsScreen(props: WorkoutDetailsProps) {
                     </View>
 
                     {props.workoutExercises?.map((workoutExercise) => (
-                        <View key={workoutExercise.id} style={workoutDetailsStyle.workoutExerciseContainer}>
-                            <Text>{workoutExercise.exerciseName}</Text>
-                            <Text>{workoutExercise.weight}</Text>
-                            <Text>{workoutExercise.sets}</Text>
-                            <Text>{workoutExercise.reps}</Text>
-                        </View>
+                        <List.Accordion title={workoutExercise.exercise} key={workoutExercise.exercise} style={workoutDetailsStyle.listAccordionExercise} titleStyle={workoutDetailsStyle.listAccordionTitle}>
+                            <View style={workoutDetailsStyle.workoutExerciseDetails}>
+                                <Text>Weight</Text >
+                                <Text>Sets</Text>
+                                <Text>Reps</Text>
+                            </View>
+                            {workoutExercise.details.map((detail) => (
+                                <View style={workoutDetailsStyle.workoutExerciseDetails}>
+                                    <Text>{detail.weight}</Text >
+                                    <Text>{detail.sets}</Text>
+                                    <Text>{detail.reps}</Text>
+                                </View>
+                            ))}
+                        </List.Accordion>
                     ))}
 
                 </Card.Content>

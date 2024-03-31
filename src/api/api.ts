@@ -15,7 +15,7 @@ export async function fetchWorkouts(token : string, page = "0", direction = "des
 };
 
 export async function fetchWorkoutExercises(token: string, workoutId: string) {
-    const response = await fetch(`${API_URL}/workouts/${workoutId}/exercises`, {
+    const response = await fetch(`${API_URL}/workouts/${workoutId}/exercises?grouped=true`, {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`

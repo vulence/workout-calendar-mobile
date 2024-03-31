@@ -19,9 +19,18 @@ export const workoutDetailsStyle = StyleSheet.create({
         justifyContent: "center",
         margin: 5
     },
-    workoutExerciseContainer: {
+    listAccordionExercise: {
+        backgroundColor: "rgb(20, 20, 20)",
+        borderRadius: 10,
+    },
+    listAccordionTitle: {
+        color: "white"
+    },
+    workoutExerciseDetails: {
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between"
-    }
+        justifyContent: "space-between",
+        marginLeft: 10,
+        marginRight: 10,
+    },
 });

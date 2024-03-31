@@ -7,7 +7,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { workoutsStyle } from './WorkoutsStyle';
 import WorkoutDetailsScreen from './WorkoutDetails/WorkoutDetailsScreen';
 import { useFonts } from 'expo-font';
-import { Workout, WorkoutExercise } from '../../types';
+import { GroupedExercise, Workout, WorkoutExercise } from '../../types';
 import { fetchWorkoutExercises, fetchWorkouts, submitWorkout } from '../api/api';
 import { AuthContext } from '../../AuthContext';
 import WorkoutDialog from './WorkoutDialog';
@@ -22,7 +22,7 @@ export default function WorkoutsScreen() {
     // Details modal states
     const [detailsDialogVisible, setDetailsDialogVisible] = useState<boolean>(false);
     const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
-    const [selectedWorkoutExercises, setSelectedWorkoutExercises] = useState<WorkoutExercise[] | null>(null);
+    const [selectedWorkoutExercises, setSelectedWorkoutExercises] = useState<GroupedExercise[] | null>(null);
 
     // Sets the details props to corresponding cards and displays it
     const handleDetailsOpen = (workout: Workout) => {

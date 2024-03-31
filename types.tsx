@@ -60,7 +60,7 @@ export type WorkoutDetailsProps = {
     visible: boolean;
     handleClose: () => void;
     workout: Workout | null;
-    workoutExercises: WorkoutExercise[] | null;
+    workoutExercises: GroupedExercise[] | null;
 };
 
 export type Workout = {
@@ -81,6 +81,18 @@ export type WorkoutExercise = {
     completed: boolean;
     workoutId: number;
     exerciseId: number;
+};
+
+export type GroupedExercise = {
+    exercise: string;
+    details: GroupedExerciseDetails[];
+};
+
+type GroupedExerciseDetails = {
+    weight: number;
+    sets: number;
+    reps: number;
+    id: number;
 };
 
 export type WorkoutDialogProps = {
