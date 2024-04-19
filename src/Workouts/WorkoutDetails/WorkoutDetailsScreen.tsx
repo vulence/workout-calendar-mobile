@@ -9,7 +9,7 @@ import { WorkoutDetailsProps } from '../../../types';
 export default function WorkoutDetailsScreen(props: WorkoutDetailsProps) {
     return (
         <Modal visible={props.visible} onDismiss={props.handleClose} style={workoutDetailsStyle.detailsModal}>
-            <Card style={{ backgroundColor: "rgb(30, 30, 30)" }} elevation={0}>
+            <Card style={{ backgroundColor: "rgb(30, 30, 30)", height: 500 }} elevation={0}>
                 <Card.Title title={<Text style={workoutDetailsStyle.detailsTitleText}>{props.workout?.title}</Text>} style={workoutDetailsStyle.detailsTitleContainer}
                     right={(pr) => <IconButton {...pr} icon="close" onPress={props.handleClose} />}
                 />
@@ -23,18 +23,20 @@ export default function WorkoutDetailsScreen(props: WorkoutDetailsProps) {
 
                     {props.workoutExercises?.map((workoutExercise) => (
                         <List.Accordion title={workoutExercise.exercise} key={workoutExercise.exercise} style={workoutDetailsStyle.listAccordionExercise} titleStyle={workoutDetailsStyle.listAccordionTitle}>
-                            <View style={workoutDetailsStyle.workoutExerciseDetails}>
-                                <Text>Weight</Text >
-                                <Text>Sets</Text>
-                                <Text>Reps</Text>
-                            </View>
-                            {workoutExercise.details.map((detail) => (
+                            <List.Section style={{borderColor: "black", borderWidth: 1, borderRadius: 10}}>
                                 <View style={workoutDetailsStyle.workoutExerciseDetails}>
-                                    <Text>{detail.weight}</Text >
-                                    <Text>{detail.sets}</Text>
-                                    <Text>{detail.reps}</Text>
+                                    <List.Item style={{borderRightColor: "white", borderRightWidth: 1, flex: 1}} title="Weight" />
+                                    <List.Item style={{borderRightColor: "white", borderRightWidth: 1, flex: 1}} title="Sets" />
+                                    <List.Item style={{flex: 1}} title="Reps" />
                                 </View>
-                            ))}
+                                {workoutExercise.details.map((detail) => (
+                                    <View style={workoutDetailsStyle.workoutExerciseDetails}>
+                                        <List.Item style={{borderRightColor: "white", borderRightWidth: 1, flex: 1}} title={detail.weight} />
+                                        <List.Item style={{borderRightColor: "white", borderRightWidth: 1, flex: 1}} title={detail.sets} />
+                                        <List.Item style={{flex: 1}} title={detail.reps} />
+                                    </View>
+                                ))}
+                            </List.Section>
                         </List.Accordion>
                     ))}
 

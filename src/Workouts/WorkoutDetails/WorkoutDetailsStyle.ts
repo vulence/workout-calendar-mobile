@@ -32,5 +32,8 @@ export const workoutDetailsStyle = StyleSheet.create({
         justifyContent: "space-between",
         marginLeft: 10,
         marginRight: 10,
+        borderWidth: 1,
+        borderColor: "white",
+        borderRadius: 10
     },
 });
