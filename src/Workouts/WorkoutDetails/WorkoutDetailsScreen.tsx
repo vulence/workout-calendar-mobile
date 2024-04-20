@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, LayoutAnimation } from 'react-native';
-import { Card, Text, Button, Divider, Portal, Modal, IconButton, List, MD3Colors } from 'react-native-paper';
+import { View, LayoutAnimation } from 'react-native';
+import { Card, Text, Divider, Modal, IconButton, List, MD3Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { workoutDetailsStyle } from './WorkoutDetailsStyle';
@@ -49,7 +49,7 @@ export default function WorkoutDetailsScreen(props: WorkoutDetailsProps) {
                         iconColor={MD3Colors.primary100}
                         size={40}
                         style={{alignSelf: "center", marginBottom: 0}}
-                        onPress={() => {}}
+                        onPress={() => props.navigation.navigate("EditWorkoutDetails")}
                     />
                 </Card.Content>
             </Card>

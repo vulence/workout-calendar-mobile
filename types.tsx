@@ -61,6 +61,7 @@ export type WorkoutDetailsProps = {
     handleClose: () => void;
     workout: Workout | null;
     workoutExercises: GroupedExercise[] | null;
+    navigation: any;
 };
 
 export type Workout = {
@@ -100,4 +101,10 @@ export type WorkoutDialogProps = {
     hideDialog: () => void;
     handleSubmit: (workout: any) => void;
     isSubmitting: boolean;
+};
+
+export type WorkoutStackParamsList = {
+    Home: undefined;
+    Workouts: undefined;
+    EditWorkoutDetails: undefined;
 };

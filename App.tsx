@@ -12,6 +12,7 @@ import AccountStackScreen from "./src/AccountStackScreen/AccountStackScreen";
 import UserStackScreen from "./src/UserStackScreen/UserStackScreen";
 import { theme } from "./AppStyle";
 import { StatusBar } from "expo-status-bar";
+import WorkoutStackScreen from "./src/WorkoutStackScreen/WorkoutStackScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -62,7 +63,7 @@ export default function App() {
                   ),
                 }}
                 />
-                <Tab.Screen name="Workouts" component={WorkoutsScreen} options={{
+                <Tab.Screen name="Workout" component={WorkoutStackScreen} options={{
                   tabBarIcon: ({ color }) => (
                     <MaterialCommunityIcons name="weight-lifter" color={color} size={26} />
                   ),

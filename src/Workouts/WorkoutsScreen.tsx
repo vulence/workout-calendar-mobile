@@ -12,7 +12,7 @@ import { fetchWorkoutExercises, fetchWorkouts, submitWorkout } from '../api/api'
 import { AuthContext } from '../../AuthContext';
 import WorkoutDialog from './WorkoutDialog';
 
-export default function WorkoutsScreen() {
+export default function WorkoutsScreen({navigation}: any) {
     const [fontsLoaded] = useFonts({
         'Inter-Regular': require('../../assets/fonts/Inter-Regular.ttf'),
         'Inter-Bold': require('../../assets/fonts/Inter-Bold.ttf'),
@@ -105,11 +105,6 @@ export default function WorkoutsScreen() {
     return (
         <View style={workoutsStyle.container}>
             <ScrollView style={workoutsStyle.content} contentContainerStyle={workoutsStyle.contentContainer}>
-                <View style={{ backgroundColor: "rgb(30, 30, 30)", paddingTop: 40 }}>
-                    <Text style={{ marginLeft: 10, marginBottom: 10, fontFamily: "Inter-Bold", fontSize: 30 }}>Workouts</Text>
-                </View>
-                <Divider style={{ backgroundColor: "rgb(0, 0, 0)" }} />
-
                 {loading ? (
                     <Modal visible={true} style={workoutsStyle.activityIndicatorOverlay} dismissable={false}>
                         <ActivityIndicator animating={true} size='large' color='white' />
@@ -148,7 +143,7 @@ export default function WorkoutsScreen() {
             />
 
             <WorkoutDialog visible={newWorkoutDialogVisible} hideDialog={() => setNewWorkoutDialogVisible(false)} handleSubmit={handleWorkoutSubmit} isSubmitting={isSubmittingWorkout} />
-            <WorkoutDetailsScreen visible={detailsDialogVisible} handleClose={handleDetailsClose} workout={selectedWorkout} workoutExercises={selectedWorkoutExercises} />
+            <WorkoutDetailsScreen navigation={navigation} visible={detailsDialogVisible} handleClose={handleDetailsClose} workout={selectedWorkout} workoutExercises={selectedWorkoutExercises} />
         </View>
     );
 }
