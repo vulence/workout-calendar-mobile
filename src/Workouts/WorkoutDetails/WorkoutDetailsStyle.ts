@@ -13,6 +13,9 @@ export const workoutDetailsStyle = StyleSheet.create({
         backgroundColor: "transparent",
         margin: 16,
     },
+    card: {
+        backgroundColor: "rgb(30, 30, 30)",
+    },
     detailsClockContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -24,7 +27,24 @@ export const workoutDetailsStyle = StyleSheet.create({
         borderRadius: 10,
     },
     listAccordionTitle: {
-        color: "white"
+        color: "white",
+    },
+    listSection: {
+        borderRadius: 10,
+        backgroundColor: "rgb(20, 20, 20)",
+        marginTop: 0,
+        paddingTop: 10,
+        paddingBottom: 10
+    },
+    listItemTitle: {
+        alignSelf: "center"
+    },
+    listItem: {
+        borderRightColor: "white",
+        borderRightWidth: 0.3,
+        flex: 1,
+        backgroundColor: "rgb(50, 50, 50)",
+        borderRadius: 10
     },
     workoutExerciseDetails: {
         display: "flex",
@@ -32,8 +52,8 @@ export const workoutDetailsStyle = StyleSheet.create({
         justifyContent: "space-between",
         marginLeft: 10,
         marginRight: 10,
-        borderWidth: 1,
+        borderWidth: 0.5,
         borderColor: "white",
-        borderRadius: 10
+        borderRadius: 10,
     },
 });

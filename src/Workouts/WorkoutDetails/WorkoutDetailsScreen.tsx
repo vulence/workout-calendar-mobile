@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView } from 'react-native';
-import { Card, Text, Button, Divider, Portal, Modal, IconButton, List } from 'react-native-paper';
+import { View, ScrollView, LayoutAnimation } from 'react-native';
+import { Card, Text, Button, Divider, Portal, Modal, IconButton, List, MD3Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { workoutDetailsStyle } from './WorkoutDetailsStyle';
 import { WorkoutDetailsProps } from '../../../types';
 
 export default function WorkoutDetailsScreen(props: WorkoutDetailsProps) {
+    const handlePress = () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    };
+    
     return (
         <Modal visible={props.visible} onDismiss={props.handleClose} style={workoutDetailsStyle.detailsModal}>
-            <Card style={{ backgroundColor: "rgb(30, 30, 30)", height: 500 }} elevation={0}>
+            <Card style={workoutDetailsStyle.card} elevation={0}>
                 <Card.Title title={<Text style={workoutDetailsStyle.detailsTitleText}>{props.workout?.title}</Text>} style={workoutDetailsStyle.detailsTitleContainer}
                     right={(pr) => <IconButton {...pr} icon="close" onPress={props.handleClose} />}
                 />
@@ -22,24 +26,31 @@ export default function WorkoutDetailsScreen(props: WorkoutDetailsProps) {
                     </View>
 
                     {props.workoutExercises?.map((workoutExercise) => (
-                        <List.Accordion title={workoutExercise.exercise} key={workoutExercise.exercise} style={workoutDetailsStyle.listAccordionExercise} titleStyle={workoutDetailsStyle.listAccordionTitle}>
-                            <List.Section style={{borderColor: "black", borderWidth: 1, borderRadius: 10}}>
+                        <List.Accordion onPress={handlePress} title={workoutExercise.exercise} key={workoutExercise.exercise} style={workoutDetailsStyle.listAccordionExercise} titleStyle={workoutDetailsStyle.listAccordionTitle}>
+                            <List.Section style={workoutDetailsStyle.listSection}>
                                 <View style={workoutDetailsStyle.workoutExerciseDetails}>
-                                    <List.Item style={{borderRightColor: "white", borderRightWidth: 1, flex: 1}} title="Weight" />
-                                    <List.Item style={{borderRightColor: "white", borderRightWidth: 1, flex: 1}} title="Sets" />
-                                    <List.Item style={{flex: 1}} title="Reps" />
+                                    <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title="Weight" />
+                                    <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title="Sets" />
+                                    <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title="Reps" />
                                 </View>
                                 {workoutExercise.details.map((detail) => (
-                                    <View style={workoutDetailsStyle.workoutExerciseDetails}>
-                                        <List.Item style={{borderRightColor: "white", borderRightWidth: 1, flex: 1}} title={detail.weight} />
-                                        <List.Item style={{borderRightColor: "white", borderRightWidth: 1, flex: 1}} title={detail.sets} />
-                                        <List.Item style={{flex: 1}} title={detail.reps} />
+                                    <View key={detail.id} style={workoutDetailsStyle.workoutExerciseDetails}>
+                                        <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title={detail.weight} />
+                                        <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title={detail.sets} />
+                                        <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title={detail.reps} />
                                     </View>
                                 ))}
                             </List.Section>
                         </List.Accordion>
                     ))}
 
+                    <IconButton
+                        icon="pencil-circle"
+                        iconColor={MD3Colors.primary100}
+                        size={40}
+                        style={{alignSelf: "center", marginBottom: 0}}
+                        onPress={() => {}}
+                    />
                 </Card.Content>
             </Card>
         </Modal>

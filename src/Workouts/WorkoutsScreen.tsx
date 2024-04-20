@@ -117,7 +117,7 @@ export default function WorkoutsScreen() {
                 ) : (
                     workouts!.map((workout, index) => (
                         <Card key={workout.id} style={workoutsStyle.card}>
-                            <Card.Title title={workout.title} subtitle={workout.duration + " min"} titleStyle={{ color: "white" }} subtitleStyle={{ color: "white" }} />
+                            <Card.Title title={workout.date} subtitle={workout.title} titleStyle={{ color: "white" }} subtitleStyle={{ color: "white" }} />
 
                             <Divider />
 
