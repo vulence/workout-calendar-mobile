@@ -108,3 +108,8 @@ export type WorkoutStackParamsList = {
     Workouts: undefined;
     EditWorkoutDetails: undefined;
 };
+
+export type EditWorkoutDetailsScreenProps = {
+    workout: Workout;
+    workoutExercises: GroupedExercise[];
+};

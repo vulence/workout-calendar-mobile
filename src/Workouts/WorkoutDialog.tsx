@@ -64,7 +64,12 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
 
                     <View style={workoutDialogStyle.inputContainer}>
                         <Text>Date</Text>
-                        <Button mode="outlined" style={workoutDialogStyle.inputButton} labelStyle={workoutDialogStyle.inputButtonText} onPress={() => setShowDatePicker(true)}>{date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()}</Button>
+                        <Button
+                            mode="outlined"
+                            style={workoutDialogStyle.inputButton}
+                            labelStyle={workoutDialogStyle.inputButtonText}
+                            onPress={() => setShowDatePicker(true)}>{date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()}
+                        </Button>
                         {showDatePicker && (
                             <DateTimePicker
                                 value={date}
@@ -77,7 +82,12 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
 
                     <View style={workoutDialogStyle.inputContainer}>
                         <Text>Duration</Text>
-                        <Button mode="outlined" style={workoutDialogStyle.inputButton} labelStyle={workoutDialogStyle.inputButtonText} onPress={() => setShowDurationPicker(true)}>{duration.getHours() + ":0" + duration.getMinutes()}</Button>
+                        <Button
+                            mode="outlined"
+                            style={workoutDialogStyle.inputButton}
+                            labelStyle={workoutDialogStyle.inputButtonText}
+                            onPress={() => setShowDurationPicker(true)}>{duration.getHours() + ":0" + duration.getMinutes()}
+                        </Button>
                         {showDurationPicker && (
                             <DateTimePicker
                                 value={duration}

@@ -49,7 +49,7 @@ export default function WorkoutDetailsScreen(props: WorkoutDetailsProps) {
                         iconColor={MD3Colors.primary100}
                         size={40}
                         style={{alignSelf: "center", marginBottom: 0}}
-                        onPress={() => props.navigation.navigate("EditWorkoutDetails")}
+                        onPress={() => props.navigation.navigate("EditWorkoutDetails", {workout: props.workout, workoutExercises: props.workoutExercises})}
                     />
                 </Card.Content>
             </Card>
