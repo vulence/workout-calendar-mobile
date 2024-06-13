@@ -20,10 +20,10 @@ The Workout Calendar App is designed to make workout tracking simple and effecti
 
 The Workout Calendar App leverages the following technologies:
 
-- **Frontend:** React
+- **Frontend:** React Native
 - **Backend:** Spring Boot
 - **Authentication:** Userfront Platform
-- **Database:** MySQL (local)
+- **Database:** PostgreSQL (local)
 - **Version Control:** Git, GitHub
 - **Deployment (Planned):** AWS Lambda
 
