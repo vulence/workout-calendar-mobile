@@ -41,11 +41,9 @@ export default function UserScreen({ route, navigation }: Props) {
         try {
             setIsLogoutLoading(true);
 
-            /*
-            context?.setUserToken(null);
-            context?.setUser(null);
+            context?.setAccessToken(null);
+            // context?.setUser(null);
             SecureStore.deleteItemAsync("accessToken");
-            */
             await new Promise(resolve => setTimeout(resolve, 2000));
 
             setIsLogoutLoading(false);

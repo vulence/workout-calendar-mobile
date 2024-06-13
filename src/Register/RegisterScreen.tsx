@@ -45,7 +45,7 @@ export default function RegisterScreen({ route, navigation }: Props) {
             // Initiate the loading icon
             setIsSubmitting(true);
 
-            const response = await fetch('http://192.168.0.12:8080/api/users/register', {
+            const response = await fetch('https://api.userfront.com/v0/tenants/8nwyjg7n/auth/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

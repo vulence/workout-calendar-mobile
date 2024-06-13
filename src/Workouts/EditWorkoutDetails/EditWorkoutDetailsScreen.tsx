@@ -27,6 +27,12 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                 <Text style={style.subtitle}>{workout.date}</Text>
             </View>
 
+            <View>
+                {workoutExercises.map((exercise) => (
+                    <Text>{exercise.exercise}</Text>
+                ))}
+            </View>
+
             <View style={style.detailsContainer}>
                 <View style={style.detailsContent}>
                     <Text style={{ fontFamily: 'Inter-Regular', marginRight: 10, fontSize: 15 }}>Duration</Text>

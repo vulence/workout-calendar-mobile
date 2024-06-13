@@ -43,7 +43,7 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
     };
 
     const handleSubmit = async () => {
-        const workout: any = {title: title, date: date, notes: '', duration: (duration.getHours() * 60 + duration.getMinutes())};
+        const workout: any = {title: title, date: date.toISOString().split('T')[0], notes: '', duration: (duration.getHours() * 60 + duration.getMinutes())};
         props.handleSubmit(workout);
     };
 
