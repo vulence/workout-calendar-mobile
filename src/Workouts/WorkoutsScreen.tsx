@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, ScrollView } from 'react-native';
-import { Card, Text, Button, Divider, FAB, ActivityIndicator, Modal } from 'react-native-paper';
+import { Card, Text, Button, Divider, FAB, ActivityIndicator, Modal, IconButton, MD3Colors } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-ratings';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { workoutsStyle } from './WorkoutsStyle';
 import WorkoutDetailsScreen from './WorkoutDetails/WorkoutDetailsScreen';
 import { useFonts } from 'expo-font';
-import { GroupedExercise, Workout, WorkoutExercise } from '../../types';
+import { GroupedExercise, Workout } from '../../types';
 import { fetchWorkoutExercises, fetchWorkouts, submitWorkout } from '../api/api';
 import { AuthContext } from '../../AuthContext';
 import WorkoutDialog from './WorkoutDialog';
 
-export default function WorkoutsScreen() {
+export default function WorkoutsScreen({navigation}: any) {
     const [fontsLoaded] = useFonts({
         'Inter-Regular': require('../../assets/fonts/Inter-Regular.ttf'),
         'Inter-Bold': require('../../assets/fonts/Inter-Bold.ttf'),
@@ -105,11 +105,6 @@ export default function WorkoutsScreen() {
     return (
         <View style={workoutsStyle.container}>
             <ScrollView style={workoutsStyle.content} contentContainerStyle={workoutsStyle.contentContainer}>
-                <View style={{ backgroundColor: "rgb(30, 30, 30)", paddingTop: 40 }}>
-                    <Text style={{ marginLeft: 10, marginBottom: 10, fontFamily: "Inter-Bold", fontSize: 30 }}>Workouts</Text>
-                </View>
-                <Divider style={{ backgroundColor: "rgb(0, 0, 0)" }} />
-
                 {loading ? (
                     <Modal visible={true} style={workoutsStyle.activityIndicatorOverlay} dismissable={false}>
                         <ActivityIndicator animating={true} size='large' color='white' />
@@ -117,7 +112,7 @@ export default function WorkoutsScreen() {
                 ) : (
                     workouts!.map((workout, index) => (
                         <Card key={workout.id} style={workoutsStyle.card}>
-                            <Card.Title title={workout.date} subtitle={workout.title} titleStyle={{ color: "white" }} subtitleStyle={{ color: "white" }} />
+                            <Card.Title title={workout.date} subtitle={workout.title} titleStyle={{ color: "white", fontWeight: "bold" }} subtitleStyle={{ color: "rgb(210, 210, 210)" }} />
 
                             <Divider />
 
@@ -131,6 +126,14 @@ export default function WorkoutsScreen() {
                                     isDisabled={false}
                                     onFinishRating={(value) => handleRatingChange(workout.id, value)}
                                     selectedColor={ratingColors[workout.id]}
+                                />
+                            </View>
+                            <View style={workoutsStyle.deleteContainer}>
+                                <IconButton
+                                    icon="delete-circle"
+                                    iconColor={MD3Colors.error50}
+                                    size={35}
+                                    onPress={() => {}}
                                 />
                             </View>
                         </Card>
@@ -147,8 +150,19 @@ export default function WorkoutsScreen() {
                 disabled={loading}
             />
 
-            <WorkoutDialog visible={newWorkoutDialogVisible} hideDialog={() => setNewWorkoutDialogVisible(false)} handleSubmit={handleWorkoutSubmit} isSubmitting={isSubmittingWorkout} />
-            <WorkoutDetailsScreen visible={detailsDialogVisible} handleClose={handleDetailsClose} workout={selectedWorkout} workoutExercises={selectedWorkoutExercises} />
+            <WorkoutDialog
+                visible={newWorkoutDialogVisible}
+                hideDialog={() => setNewWorkoutDialogVisible(false)}
+                handleSubmit={handleWorkoutSubmit} 
+                isSubmitting={isSubmittingWorkout} 
+            />
+            <WorkoutDetailsScreen 
+                navigation={navigation} 
+                visible={detailsDialogVisible} 
+                handleClose={handleDetailsClose} 
+                workout={selectedWorkout} 
+                workoutExercises={selectedWorkoutExercises} 
+            />
         </View>
     );
 }

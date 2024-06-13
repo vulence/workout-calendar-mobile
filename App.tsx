@@ -6,12 +6,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import * as SecureStore from 'expo-secure-store';
 
 import HomeScreen from "./src/Home/HomeScreen";
-import WorkoutsScreen from "./src/Workouts/WorkoutsScreen";
 import { AuthContext } from "./AuthContext";
 import AccountStackScreen from "./src/AccountStackScreen/AccountStackScreen";
 import UserStackScreen from "./src/UserStackScreen/UserStackScreen";
 import { theme } from "./AppStyle";
 import { StatusBar } from "expo-status-bar";
+import WorkoutStackScreen from "./src/WorkoutStackScreen/WorkoutStackScreen";
+import { LogBox } from "react-native";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -20,11 +21,12 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // LogBox.ignoreAllLogs();
     checkAuthentication();
   }, []);
 
   const checkAuthentication = async () => {
-    // SecureStore.deleteItemAsync('accessToken');
+    SecureStore.deleteItemAsync('accessToken');
 
     try {
       const token = await SecureStore.getItemAsync('accessToken');
@@ -62,7 +64,7 @@ export default function App() {
                   ),
                 }}
                 />
-                <Tab.Screen name="Workouts" component={WorkoutsScreen} options={{
+                <Tab.Screen name="Workout" component={WorkoutStackScreen} options={{
                   tabBarIcon: ({ color }) => (
                     <MaterialCommunityIcons name="weight-lifter" color={color} size={26} />
                   ),
