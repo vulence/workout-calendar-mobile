@@ -39,3 +39,14 @@ export async function submitWorkout(token: string, workout: any) {
     const result = await response.json();
     return result.message;
 };
+
+export async function removeWorkoutExercise(token: string, workoutId: string, workoutExerciseId: string) {
+    const response = await fetch(`${API_URL}/workouts/${workoutId}/exercises/${workoutExerciseId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    return response.status;
+}

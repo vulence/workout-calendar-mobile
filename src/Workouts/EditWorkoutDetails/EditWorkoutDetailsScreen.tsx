@@ -1,9 +1,12 @@
 import { ScrollView, View } from "react-native";
 import { Button, Divider, Icon, IconButton, MD3Colors, Text } from "react-native-paper";
 import { useFonts } from 'expo-font';
-import { EditWorkoutDetailsScreenProps } from "../../../types";
+import { EditWorkoutDetailsScreenProps, GroupedExercise } from "../../../types";
 
 import { style } from "./EditWorkoutDetailsStyle";
+import { fetchWorkoutExercises, removeWorkoutExercise } from "../../api/api";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../../AuthContext";
 
 export default function EditWorkoutDetailsScreen({ route }: any) {
     const [fontsLoaded] = useFonts({
@@ -11,13 +14,41 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
         'Inter-Bold': require('../../../assets/fonts/Inter-Bold.ttf'),
         'Inter-Medium': require('../../../assets/fonts/Inter-Medium.ttf'),
     });
-    const { workout, workoutExercises }: EditWorkoutDetailsScreenProps = route.params;
+    const { workout }: EditWorkoutDetailsScreenProps = route.params;
+    const [workoutExercises, setWorkoutExercises] = useState<GroupedExercise[]>();
+
+    useEffect(() => {
+        fetchWorkoutExercises(context.accessToken!, workout.id.toString())
+        .then(data => setWorkoutExercises(data))
+        .catch(error => console.log(error));
+    }, []);
+
+    const context = useContext(AuthContext);
 
     const returnDuration = () => {
         let hours = Math.trunc(workout.duration / 60);
         let minutes = workout.duration - hours * 60;
 
         return `${hours} ${hours === 1 ? "hour" : "hours"} ${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
+    };
+
+    const handleDeleteWorkoutExercise = async (workoutExerciseId: number) => {
+        try {
+            const status = await removeWorkoutExercise(context.accessToken!, workout.id.toString(), workoutExerciseId.toString())
+            
+            if (status == 204) {
+                setWorkoutExercises((prevExercises) =>
+                    prevExercises?.map((we) => ({
+                        ...we,
+                        details: we.details.filter((detail) => detail.id !== workoutExerciseId)
+                    }))
+                );
+            } else {
+                console.error("Failed to delete workout exercise!");
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -27,7 +58,7 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                 <Text style={style.subtitle}>{workout.date}</Text>
             </View>
 
-            {workoutExercises.map((workoutExercise) => (
+            {workoutExercises?.map((workoutExercise) => (
                 <View style={style.workoutExerciseContainer}>
                     <View style={style.workoutExerciseTitleContainer}>
                         <Text>{workoutExercise.exercise}</Text>
@@ -61,7 +92,7 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                                 iconColor={MD3Colors.error100}
                                 size={40}
                                 style={{ alignSelf: "center", margin: 0, padding: 0 }}
-                                onPress={() => {}}
+                                onPress={() => {handleDeleteWorkoutExercise(detail.id)}}
                             />
                         </View>
                     ))}

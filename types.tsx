@@ -111,5 +111,4 @@ export type WorkoutStackParamsList = {
 
 export type EditWorkoutDetailsScreenProps = {
     workout: Workout;
-    workoutExercises: GroupedExercise[];
 };
