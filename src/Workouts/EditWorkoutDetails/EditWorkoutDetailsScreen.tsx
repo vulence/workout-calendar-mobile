@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
-import { Button, Divider, FAB, Icon, IconButton, MD3Colors, Text } from "react-native-paper";
+import { Button, Divider, FAB, Icon, IconButton, MD3Colors, Text, TextInput } from "react-native-paper";
 import { useFonts } from 'expo-font';
 import { EditWorkoutDetailsScreenProps, GroupedExercise } from "../../../types";
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -8,15 +8,20 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { style } from "./EditWorkoutDetailsStyle";
 import { fetchWorkoutExercises, removeWorkoutExercise } from "../../api/api";
 import { AuthContext } from "../../../AuthContext";
+import StyledTextInput from "../../components/StyledTextInput";
 
 export default function EditWorkoutDetailsScreen({ route }: any) {
+
     const [fontsLoaded] = useFonts({
         'Inter-Regular': require('../../../assets/fonts/Inter-Regular.ttf'),
         'Inter-Bold': require('../../../assets/fonts/Inter-Bold.ttf'),
         'Inter-Medium': require('../../../assets/fonts/Inter-Medium.ttf'),
     });
+    const context = useContext(AuthContext);
+
     const { workout }: EditWorkoutDetailsScreenProps = route.params;
     const [workoutExercises, setWorkoutExercises] = useState<GroupedExercise[]>();
+    const [newRowVisible, setNewRowVisible] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         fetchWorkoutExercises(context.accessToken!, workout.id.toString())
@@ -24,7 +29,12 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
         .catch(error => console.log(error));
     }, []);
 
-    const context = useContext(AuthContext);
+    const toggleNewRowVisible = (id: string) => {
+        setNewRowVisible(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
 
     const returnDuration = () => {
         let hours = Math.trunc(workout.duration / 60);
@@ -60,7 +70,7 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
             </View>
 
             {workoutExercises?.map((workoutExercise) => (
-                <View style={style.workoutExerciseContainer}>
+                <View key={workoutExercise.exercise} style={style.workoutExerciseContainer}>
                     <View style={style.workoutExerciseTitleContainer}>
                         <Text>{workoutExercise.exercise}</Text>
                     </View>
@@ -74,7 +84,7 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                     </View>
 
                     {workoutExercise.details.map(detail => (
-                        <View style={style.workoutExerciseDetailsContainer}>
+                        <View key={detail.id} style={style.workoutExerciseDetailsContainer}>
                             <View style={style.workoutExerciseDetails}>
                                 <Text style={{flex: 2}}>{detail.weight}</Text>
                                 <Text style={{flex: 2}}>{detail.sets}</Text>
@@ -97,13 +107,29 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                             />
                         </View>
                     ))}
-                    
+
+                    {newRowVisible[workoutExercise.exercise] && <View style={style.workoutExerciseDetailsContainer}>
+                        <View style={style.workoutExerciseDetails}>
+                            <StyledTextInput keyboardType="numeric" mode="outlined" style={{flex: 2, margin: 5, marginLeft: 0}} placeholder="Weight" />
+                            <StyledTextInput keyboardType="numeric" mode="outlined" style={{flex: 2, margin: 5}} placeholder="Sets" />
+                            <StyledTextInput keyboardType="numeric" mode="outlined" style={{flex: 2, margin: 5}} placeholder="Reps" />
+                        </View>
+                        <Divider  />
+                        <IconButton
+                            icon="check-circle"
+                            iconColor={MD3Colors.primary100}
+                            size={40}
+                            style={{ alignSelf: "center", margin: 0, padding: 0 }}
+                            onPress={() => {}}
+                        />
+                    </View> }
+
                     <FAB
                         icon={() => <MaterialIcon name="add" size={24} color="white" />}
                         label="Add"
                         color="white"
                         style={style.fabStyle}
-                        onPress={() => {}}
+                        onPress={() => {toggleNewRowVisible(workoutExercise.exercise)}}
                     />
                 </View>
             ))}
