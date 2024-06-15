@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const workoutsStyle = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "rgb(66, 66, 66)"
+        backgroundColor: "rgb(66, 66, 66)",
     },
     content: {
         height: "100%",
@@ -47,6 +47,6 @@ export const workoutsStyle = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "rgba(0, 0, 0, 0.5)"
+        backgroundColor: "rgb(66,66,66)"
     }
 });

@@ -10,7 +10,8 @@ export const style = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         padding: 16,
-        borderRadius: 5
+        borderRadius: 5,
+        marginBottom: 15
     },
     title: {
         fontSize: 30,
@@ -41,7 +42,6 @@ export const style = StyleSheet.create({
         backgroundColor: "rgb(15, 15, 15)",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 12,
         padding: 16,
     },
     workoutExerciseDetailsContainer: {
@@ -59,4 +59,10 @@ export const style = StyleSheet.create({
         flex: 1,
         flexDirection: "row"
     },
+    fabStyle: {
+        alignSelf: "center",
+        backgroundColor: "black",
+        marginTop: 10,
+        borderRadius: 15
+    }
 });

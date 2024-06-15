@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { View, ScrollView, RefreshControl } from 'react-native';
 import { Card, Text, Button, Divider, FAB, ActivityIndicator, Modal, IconButton, MD3Colors } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-ratings';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -45,7 +45,7 @@ export default function WorkoutsScreen({navigation}: any) {
         getWorkouts();
     }, []);
 
-    const getWorkouts = () => {
+    const getWorkouts = async () => {
         setLoading(true);
         fetchWorkouts(context.accessToken!).then((data) => { setWorkouts(data); setLoading(false) }).catch((error) => console.error(error));
     };
@@ -102,9 +102,18 @@ export default function WorkoutsScreen({navigation}: any) {
         }).catch((error) => console.error(error));
     };
 
+    const [refreshing, setRefreshing] = useState<boolean>(false);
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        getWorkouts().then(() => setRefreshing(false));
+    }, []);
+
     return (
         <View style={workoutsStyle.container}>
-            <ScrollView style={workoutsStyle.content} contentContainerStyle={workoutsStyle.contentContainer}>
+            <ScrollView style={workoutsStyle.content} contentContainerStyle={workoutsStyle.contentContainer} refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
                 {loading ? (
                     <Modal visible={true} style={workoutsStyle.activityIndicatorOverlay} dismissable={false}>
                         <ActivityIndicator animating={true} size='large' color='white' />

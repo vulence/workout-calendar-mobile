@@ -1,11 +1,12 @@
+import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
-import { Button, Divider, Icon, IconButton, MD3Colors, Text } from "react-native-paper";
+import { Button, Divider, FAB, Icon, IconButton, MD3Colors, Text } from "react-native-paper";
 import { useFonts } from 'expo-font';
 import { EditWorkoutDetailsScreenProps, GroupedExercise } from "../../../types";
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { style } from "./EditWorkoutDetailsStyle";
 import { fetchWorkoutExercises, removeWorkoutExercise } from "../../api/api";
-import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../AuthContext";
 
 export default function EditWorkoutDetailsScreen({ route }: any) {
@@ -96,6 +97,14 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                             />
                         </View>
                     ))}
+                    
+                    <FAB
+                        icon={() => <MaterialIcon name="add" size={24} color="white" />}
+                        label="Add"
+                        color="white"
+                        style={style.fabStyle}
+                        onPress={() => {}}
+                    />
                 </View>
             ))}
 
