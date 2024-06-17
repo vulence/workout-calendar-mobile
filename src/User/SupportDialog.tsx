@@ -70,14 +70,14 @@ export default function SupportDialog(props: SupportDialogProps) {
         <Modal visible={props.visible} onDismiss={props.hideDialog} contentContainerStyle={supportDialogStyle.modal}>
             <Animated.View style={[supportDialogStyle.container, { transform: [{ translateY: translateY }] }]}>
                 <Card elevation={0} style={supportDialogStyle.card}>
-                    <Card.Title title={<Text style={supportDialogStyle.cardTitleText}>Imate problem?</Text>}
+                    <Card.Title title={<Text style={supportDialogStyle.cardTitleText}>Experiencing an issue?</Text>}
                         right={(pr) => <IconButton {...pr} icon="close" onPress={props.hideDialog} />}
                     />
                     <Divider bold={true} />
 
                     <Card.Content>
-                        <TextInput mode="outlined" label="Subjekat" style={supportDialogStyle.subjectText} outlineStyle={supportDialogStyle.subjectOutline} value={subject} onChangeText={(text) => setSubject(text)} />
-                        <TextInput mode="outlined" label="Poruka" style={supportDialogStyle.messageText} value={body} onChangeText={(text) => setBody(text)} multiline />
+                        <TextInput mode="outlined" label="Subject" style={supportDialogStyle.subjectText} outlineStyle={supportDialogStyle.subjectOutline} value={subject} onChangeText={(text) => setSubject(text)} />
+                        <TextInput mode="outlined" label="Message" style={supportDialogStyle.messageText} value={body} onChangeText={(text) => setBody(text)} multiline />
                     </Card.Content>
                     <Divider bold={true} />
 

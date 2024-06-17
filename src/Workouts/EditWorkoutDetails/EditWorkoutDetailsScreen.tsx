@@ -6,7 +6,7 @@ import { EditWorkoutDetailsScreenProps, GroupedExercise } from "../../../types";
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { style } from "./EditWorkoutDetailsStyle";
-import { fetchWorkoutExercises, removeWorkoutExercise } from "../../api/api";
+import { fetchWorkoutExercises, removeWorkoutExercise, submitWorkoutExercise } from "../../api/api";
 import { AuthContext } from "../../../AuthContext";
 import StyledTextInput from "../../components/StyledTextInput";
 
@@ -21,15 +21,24 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
 
     const { workout }: EditWorkoutDetailsScreenProps = route.params;
     const [workoutExercises, setWorkoutExercises] = useState<GroupedExercise[]>();
-    const [newRowVisible, setNewRowVisible] = useState<{ [key: string]: boolean }>({});
+    const [newRowVisible, setNewRowVisible] = useState<{ [key: number]: boolean }>({});
+    const [newWorkoutExercise, setNewWorkoutExercise] = useState({
+        weight: '',
+        sets: '',
+        reps: ''
+    });
 
-    useEffect(() => {
+    const loadExercises = () => {
         fetchWorkoutExercises(context.accessToken!, workout.id.toString())
         .then(data => setWorkoutExercises(data))
         .catch(error => console.log(error));
+    }
+
+    useEffect(() => {
+        loadExercises();
     }, []);
 
-    const toggleNewRowVisible = (id: string) => {
+    const toggleNewRowVisible = (id: number) => {
         setNewRowVisible(prev => ({
             ...prev,
             [id]: !prev[id]
@@ -62,6 +71,24 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
         }
     };
 
+    const handleSubmitWorkoutExercise = async (workoutId: number, workoutExercise: any) => {
+        try {
+            const status = await submitWorkoutExercise(context.accessToken!, workoutId.toString(), workoutExercise);
+            
+            if (status == 204) {
+                loadExercises();
+                setNewRowVisible(prev => ({
+                    ...prev,
+                    [workoutExercise.exerciseId]: false
+                }));
+            } else {
+                console.error("Failed to add workout exercise!");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <ScrollView style={style.content}>
             <View style={style.titleContainer}>
@@ -76,10 +103,9 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                     </View>
 
                     <View style={[style.workoutExerciseDetails, {paddingTop: 5, paddingBottom: 10}]}>
-                            <Text style={{marginLeft: 7, marginRight: 55}}>Weight</Text>
-                            <Text style={{marginRight: 73}}>Sets</Text>
-                            <Text style={{marginRight: 45}}>Reps</Text>
-                            <Text style={{marginRight: 20}}>Edit</Text>
+                            <Text style={{marginLeft: 10, marginRight: 55}}>Weight</Text>
+                            <Text style={{marginRight: 75}}>Sets</Text>
+                            <Text style={{marginRight: 85}}>Reps</Text>
                             <Text>Remove</Text>
                     </View>
 
@@ -88,16 +114,9 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                             <View style={style.workoutExerciseDetails}>
                                 <Text style={{flex: 2}}>{detail.weight}</Text>
                                 <Text style={{flex: 2}}>{detail.sets}</Text>
-                                <Text style={{flex: 1}}>{detail.reps}</Text>
+                                <Text style={{flex: 2}}>{detail.reps}</Text>
                             </View>
                             <Divider  />
-                            <IconButton
-                                icon="pencil-circle"
-                                iconColor={MD3Colors.primary100}
-                                size={40}
-                                style={{ alignSelf: "center", margin: 0, padding: 0 }}
-                                onPress={() => {}}
-                            />
                             <IconButton
                                 icon="close-circle"
                                 iconColor={MD3Colors.error100}
@@ -108,19 +127,33 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                         </View>
                     ))}
 
-                    {newRowVisible[workoutExercise.exercise] && <View style={style.workoutExerciseDetailsContainer}>
+                    {newRowVisible[workoutExercise.exerciseId] && <View style={style.workoutExerciseDetailsContainer}>
                         <View style={style.workoutExerciseDetails}>
-                            <StyledTextInput keyboardType="numeric" mode="outlined" style={{flex: 2, margin: 5, marginLeft: 0}} placeholder="Weight" />
-                            <StyledTextInput keyboardType="numeric" mode="outlined" style={{flex: 2, margin: 5}} placeholder="Sets" />
-                            <StyledTextInput keyboardType="numeric" mode="outlined" style={{flex: 2, margin: 5}} placeholder="Reps" />
+                            <StyledTextInput keyboardType="numeric" mode="outlined" style={{flex: 2, margin: 5, marginLeft: 0}} placeholder="Weight" 
+                                onChangeText={(value) => setNewWorkoutExercise(prevState => ({ ...prevState, weight: value}))} />
+
+                            <StyledTextInput keyboardType="numeric" mode="outlined" style={{flex: 2, margin: 5}} placeholder="Sets"
+                                onChangeText={(value) => setNewWorkoutExercise(prevState => ({ ...prevState, sets: value }))} />
+
+                            <StyledTextInput keyboardType="numeric" mode="outlined" style={{flex: 2, margin: 5}} placeholder="Reps"
+                                onChangeText={(value) => setNewWorkoutExercise(prevState => ({ ...prevState, reps: value }))} />
                         </View>
+
                         <Divider  />
+
                         <IconButton
                             icon="check-circle"
                             iconColor={MD3Colors.primary100}
                             size={40}
                             style={{ alignSelf: "center", margin: 0, padding: 0 }}
-                            onPress={() => {}}
+                            onPress={() => {
+                                handleSubmitWorkoutExercise(workout.id, {
+                                    exerciseId: workoutExercise.exerciseId,
+                                    weight: newWorkoutExercise.weight,
+                                    sets: newWorkoutExercise.sets,
+                                    reps: newWorkoutExercise.reps
+                                })
+                            }}
                         />
                     </View> }
 
@@ -129,7 +162,7 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                         label="Add"
                         color="white"
                         style={style.fabStyle}
-                        onPress={() => {toggleNewRowVisible(workoutExercise.exercise)}}
+                        onPress={() => {toggleNewRowVisible(workoutExercise.exerciseId)}}
                     />
                 </View>
             ))}

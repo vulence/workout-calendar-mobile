@@ -86,6 +86,7 @@ export type WorkoutExercise = {
 
 export type GroupedExercise = {
     exercise: string;
+    exerciseId: number;
     details: GroupedExerciseDetails[];
 };
 

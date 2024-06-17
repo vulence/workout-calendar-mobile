@@ -53,12 +53,13 @@ export default function RegisterScreen({ route, navigation }: Props) {
                 body: JSON.stringify({ username, email, password })
             });
 
-            const data:string = await response.text();
+            const data = await response.json();
 
             // Sets what the bottom snackbar will show, if the user was successfully created, go to login page
-            setSnackbarContent(data);
-            if (data === 'User created') {
-                setActionLabel("GO TO LOGIN");
+            if (data.message === 'OK') {
+                setSnackbarContent("Registration successful");
+            } else {
+                setSnackbarContent(data.message);
             }
 
             // Hide loading icon and load the snackbar
