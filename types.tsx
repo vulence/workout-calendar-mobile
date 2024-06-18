@@ -113,3 +113,18 @@ export type WorkoutStackParamsList = {
 export type EditWorkoutDetailsScreenProps = {
     workout: Workout;
 };
+
+export type AddNewExerciseDialogProps = {
+    visible: boolean;
+    hideDialog: () => void;
+    handleSubmit: (workoutId: number, workoutExercise: any) => void;
+    currentExercises: string[];
+    workoutId: number;
+};
+
+export type Exercise = {
+    id: number;
+    name: string;
+    description: string;
+    imageUrl: string;
+};

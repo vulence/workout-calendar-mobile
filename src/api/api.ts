@@ -62,4 +62,17 @@ export async function removeWorkoutExercise(token: string, workoutId: string, wo
     });
 
     return response.status;
+};
+
+export async function fetchExercises(token: string) {
+    const response = await fetch(`${API_URL}/exercises`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    const result = await response.json();
+
+    return result;
 }

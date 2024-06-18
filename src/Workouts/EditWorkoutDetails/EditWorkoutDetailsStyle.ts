@@ -64,5 +64,13 @@ export const style = StyleSheet.create({
         backgroundColor: "black",
         marginTop: 10,
         borderRadius: 15
+    },
+    fabAddNewExerciseStyle: {
+        position: 'absolute',
+        margin: 10,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "black",
+        borderRadius: 30
     }
 });
