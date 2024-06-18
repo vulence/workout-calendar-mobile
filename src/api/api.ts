@@ -40,6 +40,30 @@ export async function submitWorkout(token: string, workout: any) {
     return result.message;
 };
 
+export async function updateWorkout(token: string, workout: Workout) {
+    const response = await fetch(`${API_URL}/workouts/${workout.id.toString()}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(workout)
+    });
+
+    return response.status;
+}
+
+export async function deleteWorkout(token: string, workoutId: string) {
+    const response = await fetch(`${API_URL}/workouts/${workoutId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    return response.status;
+};
+
 export async function submitWorkoutExercise(token: string, workoutId: string, workoutExercise: any) {
     const response = await fetch(`${API_URL}/workouts/${workoutId}/exercises`, {
         method: "POST",

@@ -8,7 +8,7 @@ import { workoutsStyle } from './WorkoutsStyle';
 import WorkoutDetailsScreen from './WorkoutDetails/WorkoutDetailsScreen';
 import { useFonts } from 'expo-font';
 import { GroupedExercise, Workout } from '../../types';
-import { fetchWorkoutExercises, fetchWorkouts, submitWorkout } from '../api/api';
+import { deleteWorkout, fetchWorkoutExercises, fetchWorkouts, submitWorkout, updateWorkout } from '../api/api';
 import { AuthContext } from '../../AuthContext';
 import WorkoutDialog from './WorkoutDialog';
 
@@ -84,10 +84,11 @@ export default function WorkoutsScreen({navigation}: any) {
         }
     };
 
-    const handleRatingChange = (workoutId: number, value: number) => {
+    const handleRatingChange = (workoutId: number, workout: Workout, value: number) => {
         const updatedColors = { ...ratingColors };
         updatedColors[workoutId] = getRatingColor(value);
         setRatingColors(updatedColors);
+        updateWorkout(context.accessToken!, {...workout, rating: value});
     };
 
     const [isSubmittingWorkout, setIsSubmittingWorkout] = useState<boolean>(false);
@@ -108,6 +109,16 @@ export default function WorkoutsScreen({navigation}: any) {
         setRefreshing(true);
         getWorkouts().then(() => setRefreshing(false));
     }, []);
+
+    const handleDeleteWorkout = async (workoutId: number) => {
+        const status = await deleteWorkout(context.accessToken!, workoutId.toString());
+        
+        if (status == 204) {
+            getWorkouts();
+        } else {
+            console.error(status);
+        }
+    };
 
     return (
         <View style={workoutsStyle.container}>
@@ -133,7 +144,7 @@ export default function WorkoutsScreen({navigation}: any) {
                                     defaultRating={workout.rating ? workout.rating : 0}
                                     showRating={false}
                                     isDisabled={false}
-                                    onFinishRating={(value) => handleRatingChange(workout.id, value)}
+                                    onFinishRating={(value) => handleRatingChange(workout.id, workout, value)}
                                     selectedColor={ratingColors[workout.id]}
                                 />
                             </View>
@@ -142,7 +153,7 @@ export default function WorkoutsScreen({navigation}: any) {
                                     icon="delete-circle"
                                     iconColor={MD3Colors.error50}
                                     size={35}
-                                    onPress={() => {}}
+                                    onPress={() => handleDeleteWorkout(workout.id)}
                                 />
                             </View>
                         </Card>

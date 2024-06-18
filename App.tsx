@@ -21,12 +21,12 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // LogBox.ignoreAllLogs();
+    LogBox.ignoreAllLogs();
     checkAuthentication();
   }, []);
 
   const checkAuthentication = async () => {
-    SecureStore.deleteItemAsync('accessToken');
+    // SecureStore.deleteItemAsync('accessToken');
 
     try {
       const token = await SecureStore.getItemAsync('accessToken');

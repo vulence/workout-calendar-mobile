@@ -97,7 +97,7 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
     };
 
     return (
-        <View>
+        <View style={{display: "flex", height: "100%"}}>
             <ScrollView style={style.content}>
                 <View style={style.titleContainer}>
                     <Text style={[style.title, { fontFamily: 'Inter-Medium' }]}>{workout.title}</Text>
