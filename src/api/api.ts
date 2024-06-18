@@ -1,6 +1,6 @@
 import { Workout } from "../../types";
 
-const API_URL = "http://192.168.0.13:8080";
+const API_URL = "http://192.168.1.8:8080";
 
 export async function fetchWorkouts(token : string, page = "0", direction = "desc") {
     const response = await fetch(`${API_URL}/workouts?page=${page}&direction=${direction}`, {
@@ -39,3 +39,40 @@ export async function submitWorkout(token: string, workout: any) {
     const result = await response.json();
     return result.message;
 };
+
+export async function submitWorkoutExercise(token: string, workoutId: string, workoutExercise: any) {
+    const response = await fetch(`${API_URL}/workouts/${workoutId}/exercises`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(workoutExercise)
+    });
+
+    return response.status;
+};
+
+export async function removeWorkoutExercise(token: string, workoutId: string, workoutExerciseId: string) {
+    const response = await fetch(`${API_URL}/workouts/${workoutId}/exercises/${workoutExerciseId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    return response.status;
+};
+
+export async function fetchExercises(token: string) {
+    const response = await fetch(`${API_URL}/exercises`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    const result = await response.json();
+
+    return result;
+}

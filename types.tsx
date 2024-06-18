@@ -86,6 +86,7 @@ export type WorkoutExercise = {
 
 export type GroupedExercise = {
     exercise: string;
+    exerciseId: number;
     details: GroupedExerciseDetails[];
 };
 
@@ -111,5 +112,19 @@ export type WorkoutStackParamsList = {
 
 export type EditWorkoutDetailsScreenProps = {
     workout: Workout;
-    workoutExercises: GroupedExercise[];
+};
+
+export type AddNewExerciseDialogProps = {
+    visible: boolean;
+    hideDialog: () => void;
+    handleSubmit: (workoutId: number, workoutExercise: any) => void;
+    currentExercises: string[];
+    workoutId: number;
+};
+
+export type Exercise = {
+    id: number;
+    name: string;
+    description: string;
+    imageUrl: string;
 };

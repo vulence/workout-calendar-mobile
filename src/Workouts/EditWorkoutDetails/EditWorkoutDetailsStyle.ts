@@ -6,12 +6,12 @@ export const style = StyleSheet.create({
         backgroundColor: "rgb(66, 66, 66)"
     },
     titleContainer: {
-        backgroundColor: "rgb(15, 15, 15)",
+        backgroundColor: "rgb(25, 25, 25)",
         alignItems: "center",
         justifyContent: "center",
-        margin: 12,
         padding: 16,
-        borderRadius: 5
+        borderRadius: 5,
+        marginBottom: 15
     },
     title: {
         fontSize: 30,
@@ -34,5 +34,43 @@ export const style = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+    },
+    workoutExerciseContainer: {
+        marginBottom: 10
+    },
+    workoutExerciseTitleContainer: {
+        backgroundColor: "rgb(15, 15, 15)",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 16,
+    },
+    workoutExerciseDetailsContainer: {
+        display: "flex",
+        backgroundColor: "rgb(55, 55, 55)",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingLeft: 15,
+        paddingRight: 10,
+        flexDirection: "row",
+        borderBottomWidth: 2,
+        borderBottomColor: "black"
+    },
+    workoutExerciseDetails: {
+        flex: 1,
+        flexDirection: "row"
+    },
+    fabStyle: {
+        alignSelf: "center",
+        backgroundColor: "black",
+        marginTop: 10,
+        borderRadius: 15
+    },
+    fabAddNewExerciseStyle: {
+        position: 'absolute',
+        margin: 10,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "black",
+        borderRadius: 30
     }
 });
