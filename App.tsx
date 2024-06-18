@@ -26,7 +26,7 @@ export default function App() {
   }, []);
 
   const checkAuthentication = async () => {
-    // SecureStore.deleteItemAsync('accessToken');
+    SecureStore.deleteItemAsync('accessToken');
 
     try {
       const token = await SecureStore.getItemAsync('accessToken');
