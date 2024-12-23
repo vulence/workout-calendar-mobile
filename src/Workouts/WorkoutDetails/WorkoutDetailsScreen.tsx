@@ -30,20 +30,23 @@ export default function WorkoutDetailsScreen(props: WorkoutDetailsProps) {
                             <Icon name="clock" size={30} color="rgb(147, 27, 27)" />
                             <Text style={{ marginLeft: 10 }}>{props.workout?.duration} min</Text>
                         </View>
+                        
+                        {props.workoutDetails && Object.entries(props.workoutDetails).map(([exercise, sets]) => (
+                            <List.Accordion onPress={handlePress} title={exercise} 
+                                    key={exercise} style={workoutDetailsStyle.listAccordionExercise} 
+                                    titleStyle={workoutDetailsStyle.listAccordionTitle}>
 
-                        {props.workoutExercises?.map((workoutExercise) => (
-                            <List.Accordion onPress={handlePress} title={workoutExercise.exercise} key={workoutExercise.exercise} style={workoutDetailsStyle.listAccordionExercise} titleStyle={workoutDetailsStyle.listAccordionTitle}>
                                 <List.Section style={workoutDetailsStyle.listSection}>
                                     <View style={workoutDetailsStyle.workoutExerciseDetails}>
                                         <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title="Weight" />
                                         <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title="Sets" />
-                                        <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title="Reps" />
+                                        <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title="Set type" />
                                     </View>
-                                    {workoutExercise.details.map((detail) => (
+                                    {sets.map((detail) => (
                                         <View key={detail.id} style={workoutDetailsStyle.workoutExerciseDetails}>
                                             <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title={detail.weight} />
-                                            <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title={detail.sets} />
                                             <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title={detail.reps} />
+                                            <List.Item titleStyle={workoutDetailsStyle.listItemTitle} style={workoutDetailsStyle.listItem} title={detail.setType} />
                                         </View>
                                     ))}
                                 </List.Section>

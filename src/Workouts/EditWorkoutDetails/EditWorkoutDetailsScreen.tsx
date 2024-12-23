@@ -53,15 +53,15 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
     };
 
     const returnDuration = () => {
-        let hours = Math.trunc(workout.duration / 60);
-        let minutes = workout.duration - hours * 60;
+        let hours = Math.trunc(workout?.duration / 60);
+        let minutes = workout?.duration - hours * 60;
 
         return `${hours} ${hours === 1 ? "hour" : "hours"} ${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
     };
 
     const handleDeleteWorkoutExercise = async (workoutExerciseId: number) => {
         try {
-            const status = await removeWorkoutExercise(context.accessToken!, workout.id.toString(), workoutExerciseId.toString())
+            const status = await removeWorkoutExercise(context.accessToken!, workout?.id.toString(), workoutExerciseId.toString())
 
             if (status == 204) {
                 setWorkoutExercises((prevExercises) =>
@@ -100,8 +100,7 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
         <View style={{display: "flex", height: "100%"}}>
             <ScrollView style={style.content}>
                 <View style={style.titleContainer}>
-                    <Text style={[style.title, { fontFamily: 'Inter-Medium' }]}>{workout.title}</Text>
-                    <Text style={style.subtitle}>{workout.date}</Text>
+                    <Text style={[style.title, { fontFamily: 'Inter-Medium' }]}>{workout?.title}</Text>
                 </View>
 
                 {workoutExercises?.map((workoutExercise) => (
@@ -196,7 +195,7 @@ export default function EditWorkoutDetailsScreen({ route }: any) {
                 hideDialog={() => setNewExerciseDialogVisible(false)}
                 handleSubmit={handleSubmitWorkoutExercise} 
                 currentExercises={currentExercises}
-                workoutId={workout.id}
+                workoutId={workout?.id}
             />
         </View>
     );

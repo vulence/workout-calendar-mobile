@@ -60,41 +60,28 @@ export type WorkoutDetailsProps = {
     visible: boolean;
     handleClose: () => void;
     workout: Workout | null;
-    workoutExercises: GroupedExercise[] | null;
+    workoutDetails: WorkoutDetails | null;
     navigation: any;
 };
 
 export type Workout = {
     id: number;
     title: string;
-    date: string;
     notes: string;
     duration: number;
     rating: number;
 };
 
-export type WorkoutExercise = {
-    id: number;
-    exerciseName: string;
-    weight: number;
-    sets: number;
-    reps: number;
-    completed: boolean;
-    workoutId: number;
-    exerciseId: number;
+export type WorkoutDetails = {
+    [exercise: string]: ExerciseSet[];
 };
 
-export type GroupedExercise = {
-    exercise: string;
-    exerciseId: number;
-    details: GroupedExerciseDetails[];
-};
-
-type GroupedExerciseDetails = {
-    weight: number;
-    sets: number;
-    reps: number;
+type ExerciseSet = {
     id: number;
+    workoutExerciseId: number;
+    setType: string;
+    weight: number;
+    reps: number;
 };
 
 export type WorkoutDialogProps = {
@@ -127,4 +114,17 @@ export type Exercise = {
     name: string;
     description: string;
     imageUrl: string;
+    muscleGroupId: number;
+};
+
+export type MuscleGroup = {
+    id: number;
+    name: string;
+    description: string;
+};
+
+export type CompletedWorkout = {
+    id: number;
+    workoutId: number;
+    date: string;
 };

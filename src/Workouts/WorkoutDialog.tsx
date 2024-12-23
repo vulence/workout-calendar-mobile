@@ -9,19 +9,16 @@ import StyledTextInput from "../components/StyledTextInput";
 
 export default function WorkoutDialog(props: WorkoutDialogProps) {
     const [title, setTitle] = useState<string>('');
-    const [date, setDate] = useState<Date>(new Date());
     const [duration, setDuration] = useState<Date>(() => {
         const currentDate = new Date();
         currentDate.setHours(0);
         currentDate.setMinutes(0);
         return currentDate;
     });
-    const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
     const [showDurationPicker, setShowDurationPicker] = useState<boolean>(false);
 
     useEffect(() => {
         setTitle('');
-        setDate(new Date());
         setDuration(() => {
             const currentDate = new Date();
             currentDate.setHours(0);
@@ -30,12 +27,6 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
         });
     }, [props.visible]);
 
-    const handleDateChange = (e: DateTimePickerEvent, selectedDate?: Date) => {
-        const currentDate = selectedDate || date;
-        setShowDatePicker(false);
-        setDate(currentDate);
-    };
-
     const handleDurationChange = (e: DateTimePickerEvent, selectedDuration?: Date) => {
         const currentDuration = selectedDuration || duration;
         setShowDurationPicker(false);
@@ -43,7 +34,7 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
     };
 
     const handleSubmit = async () => {
-        const workout: any = {title: title, date: date.toISOString().split('T')[0], notes: '', duration: (duration.getHours() * 60 + duration.getMinutes())};
+        const workout: any = {title: title, notes: '', duration: (duration.getHours() * 60 + duration.getMinutes())};
         props.handleSubmit(workout);
     };
 
@@ -60,24 +51,6 @@ export default function WorkoutDialog(props: WorkoutDialogProps) {
                     <View style={workoutDialogStyle.inputContainer}>
                         <Text>Title</Text>
                         <StyledTextInput mode="outlined" placeholder="Title" value={title} style={workoutDialogStyle.input} onChangeText={(title) => setTitle(title)} />
-                    </View>
-
-                    <View style={workoutDialogStyle.inputContainer}>
-                        <Text>Date</Text>
-                        <Button
-                            mode="outlined"
-                            style={workoutDialogStyle.inputButton}
-                            labelStyle={workoutDialogStyle.inputButtonText}
-                            onPress={() => setShowDatePicker(true)}>{date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()}
-                        </Button>
-                        {showDatePicker && (
-                            <DateTimePicker
-                                value={date}
-                                mode="date"
-                                display="default"
-                                onChange={handleDateChange}
-                            />
-                        )}
                     </View>
 
                     <View style={workoutDialogStyle.inputContainer}>

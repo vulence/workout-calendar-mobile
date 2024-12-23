@@ -1,6 +1,6 @@
-import { Workout } from "../../types";
+import { CompletedWorkout, Workout } from "../../types";
 
-const API_URL = "http://192.168.1.8:8080";
+const API_URL = "http://192.168.0.11:8080";
 
 export async function fetchWorkouts(token : string, page = "0", direction = "desc") {
     const response = await fetch(`${API_URL}/workouts?page=${page}&direction=${direction}`, {
@@ -14,8 +14,8 @@ export async function fetchWorkouts(token : string, page = "0", direction = "des
     return result;
 };
 
-export async function fetchWorkoutExercises(token: string, workoutId: string) {
-    const response = await fetch(`${API_URL}/workouts/${workoutId}/exercises?grouped=true`, {
+export async function fetchWorkoutDetails(token: string, workoutId: string) {
+    const response = await fetch(`${API_URL}/workouts/${workoutId}/details`, {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`
@@ -88,6 +88,18 @@ export async function removeWorkoutExercise(token: string, workoutId: string, wo
     return response.status;
 };
 
+export async function fetchMuscleGroups(token: string) {
+    const response = await fetch(`${API_URL}/muscle-groups`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    const result = await response.json();
+    return result;
+};
+
 export async function fetchExercises(token: string) {
     const response = await fetch(`${API_URL}/exercises`, {
         method: "GET",
@@ -99,4 +111,41 @@ export async function fetchExercises(token: string) {
     const result = await response.json();
 
     return result;
-}
+};
+
+export async function deleteExercise(token: string, exerciseId: string) {
+    const response = await fetch(`${API_URL}/exercises/${exerciseId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    return response.status;
+};
+
+export async function fetchCompletedWorkouts(token: string) {
+    const response = await fetch(`${API_URL}/workouts/completed`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+    });
+
+    const result = await response.json();
+    return result;
+};
+
+export async function completeWorkout(token: string, completedWorkout: any) {
+    const response = await fetch(`${API_URL}/workouts/${completedWorkout.workoutId}/complete`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(completedWorkout)
+    });
+
+    const result = await response.json();
+    return result.message;
+};

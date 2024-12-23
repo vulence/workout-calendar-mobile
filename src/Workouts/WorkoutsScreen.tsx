@@ -7,8 +7,8 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { workoutsStyle } from './WorkoutsStyle';
 import WorkoutDetailsScreen from './WorkoutDetails/WorkoutDetailsScreen';
 import { useFonts } from 'expo-font';
-import { GroupedExercise, Workout } from '../../types';
-import { deleteWorkout, fetchWorkoutExercises, fetchWorkouts, submitWorkout, updateWorkout } from '../api/api';
+import { WorkoutDetails, Workout } from '../../types';
+import { deleteWorkout, fetchWorkoutDetails, fetchWorkouts, submitWorkout, updateWorkout } from '../api/api';
 import { AuthContext } from '../../AuthContext';
 import WorkoutDialog from './WorkoutDialog';
 
@@ -19,10 +19,24 @@ export default function WorkoutsScreen({navigation}: any) {
         'Inter-Medium': require('../../assets/fonts/Inter-Medium.ttf'),
     });
 
+    const context = useContext(AuthContext);
+    const [workouts, setWorkouts] = useState<Workout[]>();
+
+    useEffect(() => {
+        getWorkouts();
+    }, []);
+
+    const getWorkouts = async () => {
+        setLoading(true);
+        fetchWorkouts(context.accessToken!)
+        .then((data) => { setWorkouts(data); setLoading(false) })
+        .catch((error) => console.error(error));
+    };
+
     // Details modal states
     const [detailsDialogVisible, setDetailsDialogVisible] = useState<boolean>(false);
     const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
-    const [selectedWorkoutExercises, setSelectedWorkoutExercises] = useState<GroupedExercise[] | null>(null);
+    const [selectedWorkoutDetails, setSelectedWorkoutDetails] = useState<WorkoutDetails | null>(null);
 
     // Sets the details props to corresponding cards and displays it
     const handleDetailsOpen = (workout: Workout) => {
@@ -35,23 +49,14 @@ export default function WorkoutsScreen({navigation}: any) {
         setDetailsDialogVisible(false);
     };
 
-    const context = useContext(AuthContext);
-    const [workouts, setWorkouts] = useState<Workout[]>();
     const [newWorkoutDialogVisible, setNewWorkoutDialogVisible] = useState<boolean>(false);
 
     const [loading, setLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        getWorkouts();
-    }, []);
-
-    const getWorkouts = async () => {
-        setLoading(true);
-        fetchWorkouts(context.accessToken!).then((data) => { setWorkouts(data); setLoading(false) }).catch((error) => console.error(error));
-    };
-
     const getWorkoutExercises = (workoutId: number) => {
-        return fetchWorkoutExercises(context.accessToken!, workoutId.toString()).then((data) => setSelectedWorkoutExercises(data)).catch((error) => console.error(error));
+        return fetchWorkoutDetails(context.accessToken!, workoutId.toString())
+        .then((data) => setSelectedWorkoutDetails(data))
+        .catch((error) => console.error(error));
     };
 
     const [ratingColors, setRatingColors] = useState<{ [key: number]: string }>({});
@@ -132,7 +137,7 @@ export default function WorkoutsScreen({navigation}: any) {
                 ) : (
                     workouts!.map((workout, index) => (
                         <Card key={workout.id} style={workoutsStyle.card}>
-                            <Card.Title title={workout.date} subtitle={workout.title} titleStyle={{ color: "white", fontWeight: "bold" }} subtitleStyle={{ color: "rgb(210, 210, 210)" }} />
+                            <Card.Title title={workout.title} titleStyle={{ color: "white", fontWeight: "bold" }} subtitleStyle={{ color: "rgb(210, 210, 210)" }} />
 
                             <Divider />
 
@@ -181,7 +186,7 @@ export default function WorkoutsScreen({navigation}: any) {
                 visible={detailsDialogVisible} 
                 handleClose={handleDetailsClose} 
                 workout={selectedWorkout} 
-                workoutExercises={selectedWorkoutExercises} 
+                workoutDetails={selectedWorkoutDetails} 
             />
         </View>
     );
